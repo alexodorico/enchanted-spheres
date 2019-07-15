@@ -1,6 +1,7 @@
 const initialState = {
   gameStarted: false,
   gameEnded: false,
+  playersJoined: 0,
   players: {
     first: {
       id: 1,
@@ -47,5 +48,22 @@ const initialState = {
   cardPlayed: {
     card: new Object(),
     player: new String()
+  }
+}
+
+function euchre(state = initialState, action) {
+  switch (action.type) {
+    case PLAYER_JOINED:
+      if (state.playersJoined <= 3) {
+        return Object.assign({}, state, {
+          playersJoined: playersJoined++
+        });
+      }
+    case PLAYER_LEFT: 
+      return Object.assign({}, state, {
+        playersJoined: playersJoined--
+      });
+    default:
+      return state;
   }
 }
