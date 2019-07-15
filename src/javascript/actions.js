@@ -1,3 +1,18 @@
+export const PLAYER_JOINED = "PLAYER_JOINED";
+export function playerJoined(name) {
+  return {
+    type: PLAYER_JOINED,
+    name
+  }
+  
+export const PLAYER_LEFT = "PLAYER_LEFT";
+export function playerLeft(name) {
+  return {
+    type: PLAYER_LEFT,
+    name
+  }
+}
+
 export const START_GAME = "START_GAME";
 export function startGame(start) {
   return {
