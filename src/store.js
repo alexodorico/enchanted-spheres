@@ -12,7 +12,7 @@ function Player(color, dimensions) {
       health: 3,
       hand: new Array(),
       position: dimensions,
-      spells: true
+      canPlaySpell: true
     },
     mutations: {
       updateHealth(state, amount) {
@@ -31,7 +31,7 @@ function Player(color, dimensions) {
         // Within the 7x7 grid
         const onBoard = r[0] <= 6 && r[1] <= 6 && (r[0] >= 0 && r[1] >= 0);
 
-        // Not moving disagnal and not more than one space
+        // Not moving diagonal and not more than one space
         const validMove = (d[0] == 1 && d[1] == 0) || (d[0] == 0 && d[1] == 1);
 
         if (onBoard && validMove) {
@@ -49,15 +49,16 @@ function Player(color, dimensions) {
         }
       },
       updateSpells(state, value) {
-        state.spells = value;
+        state.canPlaySpell = value;
       }
     },
     actions: {},
     getters: {}
   };
 }
-
+import createLogger from "vuex/dist/logger";
 export default new Vuex.Store({
+  plugins: [createLogger()],
   state: {
     gameStarted: false,
     gameEnded: false,
@@ -71,7 +72,23 @@ export default new Vuex.Store({
   mutations: {
     toggle(state, property) {
       state[property] = state[property] === "black" ? "white" : "black";
-    }
+    },
+    startGame(state) {
+      state.gameStarted = true;
+    },
+    endGame(state) {
+      state.gameEnded = true;
+    },
+    playSpell(state, payload) {
+      state.stack.unshift(payload);
+    },
+    logHistory(state, payload) {
+      state.history.unshift(payload);
+    },
+    resolveStack(state) {
+      state.stack.forEach(spell => activate[spell]);
+    },
+    attack(state, payload) {}
   },
   actions: {},
   modules: {
@@ -79,3 +96,23 @@ export default new Vuex.Store({
     white: Player("white", [6, 6], false)
   }
 });
+
+function createSpellBook() {
+  const spells = (_ => {
+    return {
+      teleport: (payload => {
+        return {
+          activate: function() {
+            console.log("activate fired");
+            console.log(payload);
+          },
+          setPayload: function(values) {
+            payload = values;
+          }
+        };
+      })()
+    };
+  })();
+
+  return spells;
+}
