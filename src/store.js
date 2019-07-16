@@ -89,6 +89,20 @@ export default new Vuex.Store({
       state.stack.unshift(payload);
     },
 
+    counterAttack(state, payload) {},
+
+    counterSpell(state, payload) {},
+
+    block(state, payload) {},
+
+    teleport(state, payload) {},
+
+    retreat(state, payload) {},
+
+    stutter(state, payload) {},
+
+    timeWarp(state, payload) {},
+
     freeze(state, payload) {
       const user = toggle(payload.user);
       state[user].canPlaySpell = false;
