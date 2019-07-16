@@ -1,4 +1,4 @@
-import { UPDATE_LIFE, PLAY_CARD, playCard } from "./actions";
+import { UPDATE_LIFE, PLAY_CARD, PLAY_CARD } from "./actions";
 
 const initialState = {
   gameStarted: false,
@@ -19,10 +19,9 @@ const initialState = {
     spells: true
   },
   turn: new String(),
-  cardPlayed: {
-    card: new Object(),
-    player: new String()
-  },
+
+  // array of player and card objects
+  stack: new Array(),
   history: new Array()
 }
 
@@ -35,6 +34,11 @@ function endgame(state = initialState, action) {
         });
       }
       return state;
+    
+    case TOGGLE_TURN:
+      return Object.assign({}, state, {
+        turn: toggle(state.turn)
+      });
 
     case UPDATE_LIFE:
       return Object.assign({}, state, {
@@ -45,7 +49,12 @@ function endgame(state = initialState, action) {
       });
 
       case PLAY_CARD:
-        return playCard(state, action);
+        playCard(state, action);
+        return state;
+
+      case ATTACK:
+        attack(state, action);
+        return state;
     
     default:
       return state;
@@ -55,20 +64,58 @@ function endgame(state = initialState, action) {
 function playCard(state, action) {
   switch(action.card) {
     case "COUNTER_ATTACK":
-      return counterAttack(state, action);
+      return attack(state, action);
     case "COUNTER_SPELL":
       return counterSpell(state, action);
     case "BLOCK":
       return block(state, action);
-    case "FREEZE":
-      return freeze(state, action);
+    case "CONFUSION":
+      return confusion(state, action);
     case "STUTTER":
       return stutter(state, action);
     case "TIME_WARP":
       return timeWarp(state, action);
-    case "CONFUSION":
-      return confusion(state, action);
-    case "SHORTCUT":
-      return shortcut(state, action);
+    case "RETREAT":
+      return retreat(state, action);
+    case "TELEPORT":
+      return teleport(state, action);
   }
+}
+
+// Action from attacking player that opponents life by one
+function attack(state, action) {
+  let player = toggle(action.player);
+  return store.dispatch(updateLife(player, -1));
+}
+
+function counterSpell(state, action) {
+  // TODO
+}
+
+function block(state, action) {
+  // TODO
+}
+
+function confusion(state, action) {
+  // TODO
+}
+
+function stutter(state, action) {
+  // TODO
+}
+
+function timeWarp(state, action) {
+  // TODO
+}
+
+function retreat(state, action) {
+  // TODO
+}
+
+function teleport(state, action) {
+  // TODO
+}
+
+function toggle(player) {
+  return player === "black" ? "white" : "black";
 }

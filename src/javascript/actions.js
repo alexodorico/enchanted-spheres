@@ -22,6 +22,14 @@ export function startGame(start) {
   }
 }
 
+export const TOGGLE_TURN = "TOGGLE_TURN";
+export function toggleTurn(player) {
+  return {
+    type: TOGGLE_TURN,
+    player
+  }
+}
+
 export const PLAY_CARD = "PLAY_CARD";
 export function playCard(player, card) {
   return {
