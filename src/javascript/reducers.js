@@ -5,14 +5,12 @@ const initialState = {
   gameEnded: false,
   playersJoined: 0,
   black: {
-    name: new String(),
     lives: 3,
     hand: new Array(),
     position: [0,0],
     spells: true
   },
   white: {
-    name: new String(),
     lives: 3,
     hand: new Array(),
     position: [6,6],
@@ -40,21 +38,12 @@ function endgame(state = initialState, action) {
         turn: toggle(state.turn)
       });
 
-    case UPDATE_LIFE:
-      return Object.assign({}, state, {
-        [action.player]: {
-          ...state[player],
-          lives: state[player].lives + action.amount
-        }
-      });
+    case PLAY_CARD:
+      playCard(state, action);
+      return state;
 
-      case PLAY_CARD:
-        playCard(state, action);
-        return state;
-
-      case ATTACK:
-        attack(state, action);
-        return state;
+    case ATTACK:
+      return attack(state, action.player);
     
     default:
       return state;
@@ -64,7 +53,7 @@ function endgame(state = initialState, action) {
 function playCard(state, action) {
   switch(action.card) {
     case "COUNTER_ATTACK":
-      return attack(state, action);
+      return counterAttack(state, action);
     case "COUNTER_SPELL":
       return counterSpell(state, action);
     case "BLOCK":
@@ -83,9 +72,18 @@ function playCard(state, action) {
 }
 
 // Action from attacking player that opponents life by one
-function attack(state, action) {
+function counterAttack(state, action) {
   let player = toggle(action.player);
-  return store.dispatch(updateLife(player, -1));
+  return attack(state, player);
+}
+
+function attack(state, player) {
+  return Object.assign({}, state, {
+    [player]: {
+      ...state[player],
+      lives: state[player].lives - 1
+    }
+  });
 }
 
 function counterSpell(state, action) {

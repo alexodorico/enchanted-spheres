@@ -56,15 +56,6 @@ export function attack(player) {
   }
 }
 
-export const UPDATE_LIFE = "UPDATE_SCORE";
-export function updateLife(player, amount) {
-  return {
-    type: UPDATE_LIFE,
-    player,
-    amount
-  }
-}
-
 export const END_GAME = "END_GAME";
 export function endGame(end) {
   return {
