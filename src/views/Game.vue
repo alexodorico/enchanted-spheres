@@ -1,13 +1,12 @@
 <template>
   <div class="home">
     <Test/>
-    <button @click="startGame">Start Game</button>
     <button @click="toggleTurn">Toggle turn</button>
     <button @click="togglePriority">Toggle priority</button>
     <button @click="updateHealth">update health</button>
-    <button>Add card</button>
-    <button>Remove card</button>
-    <button>Attack</button>
+    <button @click="addCard">Add card</button>
+    <button @click="removeCard">Remove card</button>
+    <button @click="updatePosition">update position</button>
   </div>
 </template>
 
@@ -21,17 +20,26 @@ export default {
     Test
   },
   methods: {
-    startGame: function() {
-      this.$store.commit("toggleBoolean", "gameStarted");
-    },
     toggleTurn: function() {
-      this.$store.commit("togglePlayer", "turn");
+      this.$store.commit("toggle", "turn");
     },
     togglePriority: function() {
-      this.$store.commit("togglePlayer", "priority");
+      this.$store.commit("toggle", "priority");
     },
     updateHealth: function() {
-      this.$store.commit("updateHealth", { player: "white", amount: -1 });
+      this.$store.commit("black/updateHealth", -1);
+    },
+    addCard: function() {
+      this.$store.commit("black/updateHand", { name: "stun", action: "add" });
+    },
+    removeCard: function() {
+      this.$store.commit("black/updateHand", {
+        name: "stun",
+        action: "remove"
+      });
+    },
+    updatePosition: function() {
+      this.$store.commit("white/updatePosition", [2, 2]);
     }
   }
 };

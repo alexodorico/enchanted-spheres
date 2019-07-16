@@ -1,33 +1,31 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import { isContext } from "vm";
 
 Vue.use(Vuex);
 
 function Player(color, dimensions, firstTurn) {
   return {
+    namespaced: true,
     state: {
       color,
       health: 3,
       hand: new Array(),
       position: dimensions,
-      spells: true,
-      turn: firstTurn,
-      priority: firstTurn
+      spells: true
     },
     mutations: {
-      updateHealth(state, payload) {
-        if (payload.player === state.color) {
-          state.health = state.health + payload.amount;
-        }
+      updateHealth(state, amount) {
+        state.health = state.health + amount;
       },
       updatePosition(state, coordinates) {
         state.position = coordinates;
       },
-      updateHand(state, cardName, action) {
-        if (action === "add") {
-          state.hand.push(cardName);
+      updateHand(state, payload) {
+        if (payload.action === "add") {
+          state.hand.push(payload.name);
         } else {
-          state.hand = state.hand.filter(card => card !== cardName);
+          state.hand = state.hand.filter(card => card !== payload.name);
         }
       },
       updateSpells(state, value) {
@@ -45,14 +43,13 @@ export default new Vuex.Store({
     gameEnded: false,
     playersJoined: 0,
     stack: new Array(),
-    history: new Array()
+    history: new Array(),
+    turn: "black",
+    priority: "black"
   },
   getters: {},
   mutations: {
-    toggleBoolean(state, property) {
-      state[property] = !state[property];
-    },
-    togglePlayer(state, property) {
+    toggle(state, property) {
       state[property] = state[property] === "black" ? "white" : "black";
     }
   },
