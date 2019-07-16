@@ -71,12 +71,12 @@ function playCard(state, action) {
   }
 }
 
-// Action from attacking player that opponents life by one
 function counterAttack(state, action) {
   let player = toggle(action.player);
   return attack(state, player);
 }
 
+// Takes in player who's being attacked
 function attack(state, player) {
   return Object.assign({}, state, {
     [player]: {
@@ -91,7 +91,7 @@ function counterSpell(state, action) {
 }
 
 function block(state, action) {
-  // TODO
+  // return state;
 }
 
 function confusion(state, action) {
@@ -103,7 +103,14 @@ function stutter(state, action) {
 }
 
 function timeWarp(state, action) {
-  // TODO
+  return Object.assign({}, state, {
+    black: {
+      ...state.black, position: [0,0]
+    },
+    white: {
+      ...state.white, position: [6,6]
+    }
+  });
 }
 
 function retreat(state, action) {
