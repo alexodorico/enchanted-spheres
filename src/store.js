@@ -14,8 +14,8 @@ function Player(color, dimensions) {
       canPlaySpell: true
     },
     mutations: {
-      updateHealth(state, amount) {
-        state.health = state.health + amount;
+      updateHealth(state, payload) {
+        state.health = state.health + payload.amount;
       },
       updatePosition(state, coordinates) {
         // Current position
@@ -89,8 +89,6 @@ export default new Vuex.Store({
       state.stack.unshift(payload);
     },
 
-    counterAttack(state, payload) {},
-
     counterSpell(state, payload) {},
 
     block(state, payload) {},
@@ -106,13 +104,31 @@ export default new Vuex.Store({
     freeze(state, payload) {
       const user = toggle(payload.user);
       state[user].canPlaySpell = false;
-    },
-
-    attack(state, payload) {}
+    }
   },
   actions: {
     resolveStack({ commit, state }) {
-      state.stack.forEach(spell => commit(spell.name, spell.user));
+      state.stack.forEach(spell => commit(spell.name, spell));
+    },
+
+    attack({ commit }, payload) {
+      const user = toggle(payload.user);
+      const _payload = { user, amount: -1 };
+      commit(`${_payload.user}/updateHealth`, _payload);
+    },
+
+    counterAttack({ dispatch }, payload) {
+      dispatch("attack", payload);
+    },
+
+    checkForWin({ commit, state }) {
+      let winners = ["black", "white"].filter(player => {
+        state[player].health === 0;
+      });
+
+      if (winners) {
+        commit("endGame");
+      }
     }
   },
   modules: {
@@ -122,5 +138,6 @@ export default new Vuex.Store({
 });
 
 function toggle(user) {
+  console.log("called");
   return user === "black" ? "white" : "black";
 }

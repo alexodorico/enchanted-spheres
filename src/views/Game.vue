@@ -7,6 +7,9 @@
     <button @click="updatePosition">update position</button>
     <button @click="castFreeze">Cast Freeze</button>
     <button @click="resolveStack">Resolve Stack</button>
+    <button @click="attack">Attack</button>
+    <button @click="checkForWinner">win condition?</button>
+    <button @click="counterAttack">counter attack</button>
   </div>
 </template>
 
@@ -46,6 +49,18 @@ export default {
     },
     resolveStack: function() {
       this.$store.dispatch("resolveStack");
+    },
+    attack: function() {
+      // who is attacking
+      this.$store.dispatch("attack", {user: "black"});
+    },
+
+    checkForWinner: function() {
+      this.$store.dispatch("checkForWin");
+    },
+
+    counterAttack: function() {
+      this.$store.dispatch("counterAttack", {user: "black"});
     }
   }
 };
