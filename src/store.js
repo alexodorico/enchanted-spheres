@@ -81,50 +81,33 @@ export default new Vuex.Store({
       state.gameEnded = true;
     },
 
-    playSpell(state, payload) {
-      const effect = createEffect(payload);
-      const _spell = new Spell(effect, payload);
-      state.stack.unshift(_spell);
-    },
-
     logHistory(state, payload) {
       state.history.unshift(payload);
     },
 
-    freeze(state, payload) {
-      state[payload.user].canPlaySpell = false;
+    playSpell(state, payload) {
+      state.stack.unshift(payload);
     },
 
-    // player and spell name
-    resolveStack(state) {
-      state.stack.forEach(spell => spell.activate());
+    freeze(state, payload) {
+      const user = toggle(payload.user);
+      state[user].canPlaySpell = false;
     },
 
     attack(state, payload) {}
   },
-  actions: {},
+  actions: {
+    // player and spell name
+    resolveStack({ commit, state }) {
+      state.stack.forEach(spell => commit(spell.name, spell));
+    }
+  },
   modules: {
     black: Player("black", [0, 0], true),
     white: Player("white", [6, 6], false)
   }
 });
 
-function Spell(effect, payload) {
-  const _spell = (payload => {
-    return {
-      activate: function() {
-        effect(payload);
-      }
-    };
-  })(payload);
-
-  return _spell;
-}
-
-function createEffect(payload) {
-  console.log(payload);
-  return function(_payload) {
-    console.log(_payload);
-    commit(payload.card, _payload);
-  };
+function toggle(user) {
+  return user === "black" ? "white" : "black";
 }

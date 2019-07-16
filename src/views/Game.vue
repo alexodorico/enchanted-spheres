@@ -42,10 +42,10 @@ export default {
       this.$store.commit("playSpell", { user: "black", card: "freeze" });
     },
     castFreeze: function() {
-      this.$store.commit("playSpell", { user: "black", card: "freeze" });
+      this.$store.commit("playSpell", { user: "black", name: "freeze" });
     },
     resolveStack: function() {
-      this.$store.commit("resolveStack");
+      this.$store.dispatch("resolveStack");
     }
   }
 };
