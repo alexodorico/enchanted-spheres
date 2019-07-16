@@ -19,7 +19,26 @@ function Player(color, dimensions, firstTurn) {
         state.health = state.health + amount;
       },
       updatePosition(state, coordinates) {
-        state.position = coordinates;
+        // Current position
+        const c = state.coordinates;
+
+        // Requested position
+        const r = coordinates;
+
+        // Distance requested
+        const distance = [Math.abs(c[0] + r[0]), Math.abs(c[1] + r[1])];
+
+        // Within the 7x7 grid
+        const onBoard = r[0] <= 6 && r[1] <= 6 && (r[0] >= 0 && r[1] >= 0);
+
+        // Not moving disagnal and not more than one space
+        const validMove = distance !== [1, 0] || [0, 1];
+
+        if (onBoard && validMove) {
+          state.position = coordinates;
+        } else {
+          displayError("Please make a valid move");
+        }
       },
       updateHand(state, payload) {
         if (payload.action === "add") {
