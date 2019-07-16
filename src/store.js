@@ -14,8 +14,8 @@ function Player(color, dimensions) {
       canPlaySpell: true
     },
     mutations: {
-      updateHealth(state, payload) {
-        state.health = state.health + payload.amount;
+      updateHealth(state) {
+        state.health = state.health - 1;
       },
       updatePosition(state, coordinates) {
         // Current position
@@ -40,12 +40,8 @@ function Player(color, dimensions) {
           console.log("Please make a valid move");
         }
       },
-      updateHand(state, payload) {
-        if (payload.action === "add") {
-          state.hand.push(payload.name);
-        } else {
-          state.hand = state.hand.filter(card => card !== payload.name);
-        }
+      removeCardFromHand(state, payload) {
+        state.hand = state.hand.filter(card => card !== payload.name);
       },
       updateSpells(state, value) {
         state.canPlaySpell = value;
@@ -59,7 +55,7 @@ import createLogger from "vuex/dist/logger";
 export default new Vuex.Store({
   plugins: [createLogger()],
   state: {
-    gameStarted: false,
+    gameStarted: true,
     gameEnded: false,
     playersJoined: 0,
     stack: new Array(),
@@ -85,7 +81,7 @@ export default new Vuex.Store({
       state.history.unshift(payload);
     },
 
-    playSpell(state, payload) {
+    updateStack(state, payload) {
       state.stack.unshift(payload);
     },
 
@@ -111,10 +107,15 @@ export default new Vuex.Store({
       state.stack.forEach(spell => commit(spell.name, spell));
     },
 
+    playSpell({ commit }, payload) {
+      commit(`${payload.user}/removeCardFromHand`, payload);
+      commit("updateStack", payload);
+    },
+
     attack({ commit }, payload) {
       const user = toggle(payload.user);
       const _payload = { user, amount: -1 };
-      commit(`${_payload.user}/updateHealth`, _payload);
+      commit(`${_payload.user}/updateHealth`);
     },
 
     counterAttack({ dispatch }, payload) {
@@ -122,13 +123,11 @@ export default new Vuex.Store({
     },
 
     checkForWin({ commit, state }) {
-      let winners = ["black", "white"].filter(player => {
-        state[player].health === 0;
-      });
+      let winners = ["black", "white"].filter(
+        player => state[player].health <= 0
+      );
 
-      if (winners) {
-        commit("endGame");
-      }
+      if (winners.length) commit("endGame");
     }
   },
   modules: {
@@ -138,6 +137,5 @@ export default new Vuex.Store({
 });
 
 function toggle(user) {
-  console.log("called");
   return user === "black" ? "white" : "black";
 }
