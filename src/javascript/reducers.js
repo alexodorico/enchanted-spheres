@@ -38,9 +38,13 @@ function endgame(state = initialState, action) {
         turn: toggle(state.turn)
       });
 
+    // need to make state.stack? and return not just state
     case PLAY_CARD:
-      playCard(state, action);
-      return state;
+      return Object.assign({}, state, {
+        stack: [
+          action, ...state.stack
+        ]
+      });
 
     case ATTACK:
       return attack(state, action.player);
@@ -50,7 +54,7 @@ function endgame(state = initialState, action) {
   }
 }
 
-function playCard(state, action) {
+function applyEffect(state, action) {
   switch(action.card) {
     case "COUNTER_ATTACK":
       return counterAttack(state, action);
