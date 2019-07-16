@@ -1,3 +1,3 @@
 # Endgame
 
-It's a game
+Inspired by Chess and Duelyst.
