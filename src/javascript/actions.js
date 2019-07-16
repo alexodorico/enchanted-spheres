@@ -39,10 +39,10 @@ export function playCard(player, card) {
   }
 }
 
-export const MOVE_PLAYER = "MOVE_PLAYER";
-export function movePlayer(player, coordinates) {
+export const MOVE = "MOVE";
+export function move(player, coordinates) {
   return {
-    type: MOVE_PLAYER,
+    type: MOVE,
     player,
     coordinates
   }
@@ -63,3 +63,12 @@ export function endGame(end) {
     end
   }
 }
+
+const CONFUSION = "CONFUSION";
+const COUNTER_ATTACK = "COUNTER_ATTACK";
+const COUNTER_SPELL = "COUNTER_SPELL";
+const BLOCK = "BLOCK";
+const STUTTER = "STUTTER";
+const TIME_WARP = "TIME_WARP";
+const RETREAT = "RETREAT";
+const TELEPORT = "TELEPORT";

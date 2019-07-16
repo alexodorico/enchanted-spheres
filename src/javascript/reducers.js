@@ -1,4 +1,4 @@
-import { UPDATE_LIFE, PLAY_CARD, PLAY_CARD } from "./actions";
+import { UPDATE_LIFE, PLAY_CARD, PLAY_CARD, move } from "./actions";
 
 const initialState = {
   gameStarted: false,
@@ -38,7 +38,6 @@ function endgame(state = initialState, action) {
         turn: toggle(state.turn)
       });
 
-    // need to make state.stack? and return not just state
     case PLAY_CARD:
       return Object.assign({}, state, {
         stack: [
@@ -48,6 +47,11 @@ function endgame(state = initialState, action) {
 
     case ATTACK:
       return attack(state, action.player);
+
+    case MOVE:
+      return Object.assign({}, state, {
+        [action.player]: move(state[action.player], action)
+      });
     
     default:
       return state;
@@ -75,11 +79,6 @@ function applyEffect(state, action) {
   }
 }
 
-function counterAttack(state, action) {
-  let player = toggle(action.player);
-  return attack(state, player);
-}
-
 // Takes in player who's being attacked
 function attack(state, player) {
   return Object.assign({}, state, {
@@ -88,6 +87,17 @@ function attack(state, player) {
       lives: state[player].lives - 1
     }
   });
+}
+
+function move(state, action) {
+  return Object.assign({}, state, {
+    position: [action.coordinates[0], action.coordinate[1]]
+  });
+}
+
+function counterAttack(state, action) {
+  let player = toggle(action.player);
+  return attack(state, player);
 }
 
 function counterSpell(state, action) {
