@@ -22,6 +22,32 @@ export function startGame(start) {
   }
 }
 
+export const START_TURN = "START_TURN";
+export function startTurn(start) {
+  return {
+    type: START_TURN,
+    start
+  }
+}
+
+
+
+export const END_GAME = "END_GAME";
+export function endGame(end) {
+  return {
+    type: END_GAME,
+    end
+  }
+}
+
+export const END_TURN = "END_TURN";
+export function endTurn(end) {
+  return {
+    type: END_TURN,
+    end
+  }
+}
+
 export const TOGGLE_TURN = "TOGGLE_TURN";
 export function toggleTurn(player) {
   return {
@@ -39,6 +65,14 @@ export function playCard(player, card) {
   }
 }
 
+export const TOGGLE_PRIORITY = "TOGGLE_PRIORITY";
+export function togglePriority(player) {
+  return {
+    type: TOGGLE_PRIORITY,
+    player
+  }
+}
+
 export const MOVE = "MOVE";
 export function move(player, coordinates) {
   return {
@@ -53,14 +87,6 @@ export function attack(player) {
   return {
     type: ATTACK,
     player
-  }
-}
-
-export const END_GAME = "END_GAME";
-export function endGame(end) {
-  return {
-    type: END_GAME,
-    end
   }
 }
 
