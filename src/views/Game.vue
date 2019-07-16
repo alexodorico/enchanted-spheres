@@ -37,7 +37,7 @@ export default {
     },
     attack: function() {
       // who is attacking
-      this.$store.dispatch("attack", {user: "black"});
+      this.$store.dispatch("attackIntent", {user: "black", name: "attack"});
     },
 
     updatePosition: function() {
@@ -49,7 +49,7 @@ export default {
     },
 
     counterAttack: function() {
-      this.$store.dispatch("counterAttack", {user: "black"});
+      this.$store.dispatch("playSpell", {user: "black", name:  "counterAttack"});
     }
   }
 };

@@ -105,8 +105,14 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    resolveStack({ commit, state }) {
-      state.stack.forEach(spell => commit(spell.name, spell));
+    resolveStack({ commit, dispatch, state }) {
+      state.stack.forEach(actions => {
+        try {
+          commit(actions.name, actions) || dispatch(actions.name, actions);
+        } catch {
+          dispatch(actions.name, actions) || commit(actions.name, actions);
+        }
+      });
     },
 
     playSpell({ commit }, payload) {
@@ -114,10 +120,13 @@ export default new Vuex.Store({
       commit("updateStack", payload);
     },
 
+    attackIntent({ commit }, payload) {
+      commit("updateStack", payload);
+    },
+
     attack({ commit }, payload) {
       const user = toggle(payload.user);
-      const _payload = { user, amount: -1 };
-      commit(`${_payload.user}/updateHealth`);
+      commit(`${user}/updateHealth`);
     },
 
     counterAttack({ dispatch }, payload) {
