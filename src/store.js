@@ -70,7 +70,7 @@ export default new Vuex.Store({
   getters: {},
   mutations: {
     toggle(state, property) {
-      state[property] = state[property] === "black" ? "white" : "black";
+      state[property] = toggle(state[property]);
     },
 
     startGame(state) {
@@ -97,7 +97,6 @@ export default new Vuex.Store({
     attack(state, payload) {}
   },
   actions: {
-    // player and spell name
     resolveStack({ commit, state }) {
       state.stack.forEach(spell => commit(spell.name, spell));
     }
