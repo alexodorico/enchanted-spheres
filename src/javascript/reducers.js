@@ -1,68 +1,49 @@
+import { UPDATE_LIFE, PLAY_CARD } from "./actions";
+
 const initialState = {
   gameStarted: false,
   gameEnded: false,
   playersJoined: 0,
-  players: {
-    first: {
-      id: 1,
-      name: new String(),
-      team: "black"
-    },
-    second: {
-      id: 2,
-      name: new String(),
-      team: "red"
-    },
-    third: {
-      id: 3,
-      name: new String(),
-      team: "black"
-    },
-    fourth: {
-      id: 4,
-      name: new String(),
-      team: "red"
-    }
+  black: {
+    name: new String(),
+    lives: 3,
+    hand: new Array(),
+    position: [0,0],
+    spells: true
   },
-  matchScore: {
-    black: 0,
-    red: 0
+  white: {
+    name: new String(),
+    lives: 3,
+    hand: new Array(),
+    position: [6,6],
+    spells: true
   },
-  roundNumber: 0,
-  roundScore: {
-    black: 0,
-    red: 0
-  },
-  deckOfCards: new Array(),
-  dealer: new String(),
-  hands: {
-    first: new Array(),
-    second: new Array(),
-    third: new Array(),
-    fourth: new Array()
-  },
-  trump: new String(),
-  goingAlone: undefined,
-  playersTurn: undefined,
-  cardLed: new Object(),
+  turn: new String(),
   cardPlayed: {
     card: new Object(),
     player: new String()
-  }
+  },
+  history: new Array()
 }
 
-function euchre(state = initialState, action) {
+function endgame(state = initialState, action) {
   switch (action.type) {
     case PLAYER_JOINED:
-      if (state.playersJoined <= 3) {
+      if (state.playersJoined > 2) {
         return Object.assign({}, state, {
-          playersJoined: playersJoined++
+          //
         });
       }
-    case PLAYER_LEFT: 
+      return state;
+
+    case UPDATE_LIFE:
       return Object.assign({}, state, {
-        playersJoined: playersJoined--
+        [action.player]: {
+          ...state[player],
+          lives: state[player].lives + action.amount
+        }
       });
+    
     default:
       return state;
   }
