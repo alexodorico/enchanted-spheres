@@ -3,9 +3,10 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-function Player(dimensions, firstTurn) {
+function Player(color, dimensions, firstTurn) {
   return {
     state: {
+      color,
       health: 3,
       hand: new Array(),
       position: dimensions,
@@ -14,11 +15,10 @@ function Player(dimensions, firstTurn) {
       priority: firstTurn
     },
     mutations: {
-      toggle(state, property) {
-        state[property] = !state[property];
-      },
-      updateHealth(state, amount) {
-        state.health = state.health + amount;
+      updateHealth(state, payload) {
+        if (payload.player === state.color) {
+          state.health = state.health + payload.amount;
+        }
       },
       updatePosition(state, coordinates) {
         state.position = coordinates;
@@ -29,6 +29,9 @@ function Player(dimensions, firstTurn) {
         } else {
           state.hand = state.hand.filter(card => card !== cardName);
         }
+      },
+      updateSpells(state, value) {
+        state.spells = value;
       }
     },
     actions: {},
@@ -41,12 +44,21 @@ export default new Vuex.Store({
     gameStarted: false,
     gameEnded: false,
     playersJoined: 0,
-    black: Player([0, 0], true),
-    white: Player([6, 6], false),
     stack: new Array(),
     history: new Array()
   },
   getters: {},
-  mutations: {},
-  actions: {}
+  mutations: {
+    toggleBoolean(state, property) {
+      state[property] = !state[property];
+    },
+    togglePlayer(state, property) {
+      state[property] = state[property] === "black" ? "white" : "black";
+    }
+  },
+  actions: {},
+  modules: {
+    black: Player("black", [0, 0], true),
+    white: Player("white", [6, 6], false)
+  }
 });
