@@ -112,7 +112,7 @@ export default new Vuex.Store({
   },
   actions: {
     resolveStack({ commit, state }) {
-      state.stack.forEach(spell => commit(spell.name, spell));
+      state.stack.forEach(spell => commit(spell.name, spell.user));
     }
   },
   modules: {
