@@ -1,12 +1,12 @@
 <template>
   <div class="home">
     <Test/>
-    <button @click="toggleTurn">Toggle turn</button>
-    <button @click="togglePriority">Toggle priority</button>
     <button @click="updateHealth">update health</button>
     <button @click="addCard">Add card</button>
     <button @click="removeCard">Remove card</button>
     <button @click="updatePosition">update position</button>
+    <button @click="castFreeze">Cast Freeze</button>
+    <button @click="resolveStack">Resolve Stack</button>
   </div>
 </template>
 
@@ -39,7 +39,13 @@ export default {
       });
     },
     updatePosition: function() {
-      this.$store.commit("white/updatePosition", [2, 2]);
+      this.$store.commit("playSpell", { user: "black", card: "freeze" });
+    },
+    castFreeze: function() {
+      this.$store.commit("playSpell", { user: "black", card: "freeze" });
+    },
+    resolveStack: function() {
+      this.$store.commit("resolveStack");
     }
   }
 };

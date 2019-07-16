@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { isContext } from "vm";
 
 Vue.use(Vuex);
 
@@ -73,21 +72,34 @@ export default new Vuex.Store({
     toggle(state, property) {
       state[property] = state[property] === "black" ? "white" : "black";
     },
+
     startGame(state) {
       state.gameStarted = true;
     },
+
     endGame(state) {
       state.gameEnded = true;
     },
+
     playSpell(state, payload) {
-      state.stack.unshift(payload);
+      const effect = createEffect(payload);
+      const _spell = new Spell(effect, payload);
+      state.stack.unshift(_spell);
     },
+
     logHistory(state, payload) {
       state.history.unshift(payload);
     },
-    resolveStack(state) {
-      state.stack.forEach(spell => activate[spell]);
+
+    freeze(state, payload) {
+      state[payload.user].canPlaySpell = false;
     },
+
+    // player and spell name
+    resolveStack(state) {
+      state.stack.forEach(spell => spell.activate());
+    },
+
     attack(state, payload) {}
   },
   actions: {},
@@ -97,22 +109,22 @@ export default new Vuex.Store({
   }
 });
 
-function createSpellBook() {
-  const spells = (_ => {
+function Spell(effect, payload) {
+  const _spell = (payload => {
     return {
-      teleport: (payload => {
-        return {
-          activate: function() {
-            console.log("activate fired");
-            console.log(payload);
-          },
-          setPayload: function(values) {
-            payload = values;
-          }
-        };
-      })()
+      activate: function() {
+        effect(payload);
+      }
     };
-  })();
+  })(payload);
 
-  return spells;
+  return _spell;
+}
+
+function createEffect(payload) {
+  console.log(payload);
+  return function(_payload) {
+    console.log(_payload);
+    commit(payload.card, _payload);
+  };
 }
