@@ -32,16 +32,24 @@ export function playCard(player, card) {
 }
 
 export const MOVE_PLAYER = "MOVE_PLAYER";
-export function movePlayer(player, card) {
+export function movePlayer(player, coordinates) {
   return {
     type: MOVE_PLAYER,
     player,
-    card
+    coordinates
+  }
+}
+
+export const ATTACK = "ATTACK";
+export function attack(player) {
+  return {
+    type: ATTACK,
+    player
   }
 }
 
 export const UPDATE_LIFE = "UPDATE_SCORE";
-export function updateLife(team, amount) {
+export function updateLife(player, amount) {
   return {
     type: UPDATE_LIFE,
     player,
