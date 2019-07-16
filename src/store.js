@@ -85,7 +85,9 @@ export default new Vuex.Store({
       state.stack.unshift(payload);
     },
 
-    counterSpell(state, payload) {},
+    counterSpell(state) {
+      state.stack.shift();
+    },
 
     block(state, payload) {},
 
