@@ -17,9 +17,11 @@ const initialState = {
     spells: true
   },
   turn: new String(),
-
+  priority: new String(),
   // array of player and card objects
   stack: new Array(),
+
+  // 
   history: new Array()
 }
 
@@ -36,6 +38,11 @@ function endgame(state = initialState, action) {
     case TOGGLE_TURN:
       return Object.assign({}, state, {
         turn: toggle(state.turn)
+      });
+
+    case TOGGLE_PRIORITY:
+      return Object.assign({}, state, {
+        turn: toggle(state.priority)
       });
 
     case PLAY_CARD:
