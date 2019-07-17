@@ -123,6 +123,8 @@ export default new Vuex.Store({
       state.stack.forEach(actions => {
         commit(actions.name, actions);
       });
+
+      dispatch("checkForWin");
     },
 
     checkForWin({ commit, state }) {
