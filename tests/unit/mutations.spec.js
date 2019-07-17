@@ -15,7 +15,7 @@ const {
   block,
   // teleport,
   // retreat,
-  // stutter,
+  stutter,
   timeWarp
 } = mutations;
 
@@ -142,5 +142,24 @@ describe("mutations", () => {
     expect(state.positions.black[1]).to.equal(0);
     expect(state.positions.white[0]).to.equal(6);
     expect(state.positions.white[1]).to.equal(6);
+  });
+
+  it("stutter", () => {
+    const state = {
+      positions: {
+        black: [3, 3],
+        white: [4, 3]
+      },
+      history: {
+        black: [[3, 3], [2, 3], [2, 2]],
+        white: [[4, 3], [3, 3], [3, 2]]
+      }
+    };
+
+    stutter(state);
+    expect(state.positions.black[0]).to.equal(2);
+    expect(state.positions.black[1]).to.equal(3);
+    expect(state.positions.white[0]).to.equal(3);
+    expect(state.positions.white[1]).to.equal(3);
   });
 });

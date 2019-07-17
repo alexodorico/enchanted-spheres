@@ -59,7 +59,10 @@ const mutations = {
 
   retreat(state, payload) {},
 
-  stutter(state, payload) {},
+  stutter(state, payload) {
+    state.positions.black = state.history.black[1];
+    state.positions.white = state.history.white[1];
+  },
 
   timeWarp(state) {
     state.positions.black = [0, 0];
