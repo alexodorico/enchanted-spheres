@@ -1,10 +1,7 @@
 const actions = {
   moveIntent({ commit }, payload) {
-    const validMove = checkForValidMove(state, payload.coordinates);
-    if (validMove) {
-      commit("updateStack", payload);
-      commit("toggle", payload);
-    }
+    commit("updateStack", payload);
+    commit("toggle", payload);
   },
 
   attackIntent({ commit }, payload) {

@@ -5,8 +5,9 @@ const mutations = {
     state.gameStarted = true;
   },
 
-  endGame(state) {
+  endGame(state, payload) {
     state.gameEnded = true;
+    state.winner = payload.winner;
   },
 
   updateStack(state, payload) {
@@ -51,17 +52,20 @@ const mutations = {
     state.frozen[user] = true;
   },
 
-  block(state, payload) {
+  block(state) {
     state.stack.shift();
   },
 
-  teleport(state, payload) {},
+  teleport(state, payload) {
+    state.history[payload.user].unshift(payload.coordinates);
+    state.position[payload.user] = payload.coordinates;
+  },
 
   retreat(state, payload) {
     state.positions[payload.user] = state.history[payload.user][1];
   },
 
-  stutter(state, payload) {
+  stutter(state) {
     state.positions.black = state.history.black[1];
     state.positions.white = state.history.white[1];
   },

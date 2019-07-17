@@ -24,7 +24,8 @@ const state = {
   frozen: {
     black: false,
     white: false
-  }
+  },
+  winner: false
 };
 
 export default state;

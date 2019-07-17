@@ -27,8 +27,9 @@ describe("mutations", () => {
   });
 
   it("endGame", () => {
-    const state = { gameEnded: false };
-    endGame(state);
+    const state = { gameEnded: false, winner: false };
+    const payload = { winner: "black" };
+    endGame(state, payload);
     expect(state.gameEnded).to.equal(true);
   });
 
@@ -182,5 +183,17 @@ describe("mutations", () => {
     expect(state.positions.black[1]).to.equal(2);
     expect(state.positions.white[0]).to.equal(2);
     expect(state.positions.white[1]).to.equal(1);
+  });
+
+  it("teleport", () => {
+    const state = { position: { black: [0, 0] }, history: { black: [[0, 0]] } };
+    const payload = { user: "black", coordinates: [1, 1] };
+    updatePosition(state, payload);
+    expect(state.position.black).to.be.an("array");
+    expect(state.position.black).to.have.lengthOf(2);
+    expect(state.position.black[0]).to.equal(1);
+    expect(state.position.black[1]).to.equal(1);
+    expect(state.history.black).to.be.an("array");
+    expect(state.history.black).to.have.lengthOf(2);
   });
 });
