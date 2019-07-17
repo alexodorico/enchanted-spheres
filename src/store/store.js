@@ -14,7 +14,7 @@ export default new Vuex.Store({
   plugins: [createLogger()]
 });
 
-export function toggle(user) {
+export function swap(user) {
   return user === "black" ? "white" : "black";
 }
 

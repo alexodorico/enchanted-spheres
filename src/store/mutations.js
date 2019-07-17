@@ -1,4 +1,4 @@
-import { toggle } from "./store";
+import { swap } from "./store";
 
 const mutations = {
   startGame(state) {
@@ -23,11 +23,11 @@ const mutations = {
 
   toggle(state, payload) {
     const property = payload.property;
-    state[property] = toggle(state[property]);
+    state[property] = swap(state[property]);
   },
 
   attack(state, payload) {
-    const user = toggle(payload.user);
+    const user = swap(payload.user);
     state.health[user] = state.health[user] - 1;
   },
 
@@ -37,7 +37,7 @@ const mutations = {
   },
 
   counterAttack(state, payload) {
-    const user = toggle(payload.user);
+    const user = swap(payload.user);
     state.health[user] = state.health[user] - 1;
   },
 
@@ -50,7 +50,7 @@ const mutations = {
   },
 
   freeze(state, payload) {
-    const user = toggle(payload.user);
+    const user = swap(payload.user);
     state.frozen[user] = true;
   },
 
