@@ -39,24 +39,24 @@ describe("mutations", () => {
 
     // First item added to stack
     updateStack(state, payload);
-    expect(state.stack.length).to.equal(1);
-    expect(state.stack[0].user).to.equal("black");
-    expect(state.stack[0].name).to.equal("freeze");
+    expect(state.stack).to.have.lengthOf(1);
+    expect(state.stack).to.include(payload);
+    expect(state.stack[0]).to.be.an("object");
 
     // Second item added to stack
     payload = { user: "white", name: "teleport" };
     updateStack(state, payload);
-    expect(state.stack.length).to.equal(2);
-    expect(state.stack[0].user).to.equal("white");
-    expect(state.stack[0].name).to.equal("teleport");
-    expect(state.stack[1].user).to.equal("black");
-    expect(state.stack[1].name).to.equal("freeze");
+    expect(state.stack).to.have.lengthOf(2);
+    expect(state.stack).to.include(payload);
+    expect(state.stack[0]).to.be.an("object");
   });
 
   it("updatePosition", () => {
     const state = { position: { black: [0, 0] } };
     const payload = { user: "black", coordinates: [0, 1] };
     updatePosition(state, payload);
+    expect(state.position.black).to.have.lengthOf(2);
+    expect(state.position.black).to.be.an("array");
     expect(state.position.black[0]).to.equal(0);
     expect(state.position.black[1]).to.equal(1);
   });
@@ -65,6 +65,7 @@ describe("mutations", () => {
     const state = { turn: "black" };
     const payload = { property: "turn" };
     toggle(state, payload);
+    expect(state.turn).to.be.a("string");
     expect(state.turn).to.equal("white");
   });
 
@@ -72,6 +73,7 @@ describe("mutations", () => {
     const state = { health: { black: 3 } };
     const payload = { user: "white" };
     attack(state, payload);
+    expect(state.health.black).to.be.a("number");
     expect(state.health.black).to.equal(2);
   });
 
@@ -79,6 +81,7 @@ describe("mutations", () => {
     const state = { health: { black: 3 } };
     const payload = { user: "white" };
     counterAttack(state, payload);
+    expect(state.health.black).to.be.a("number");
     expect(state.health.black).to.equal(2);
   });
 
@@ -86,7 +89,7 @@ describe("mutations", () => {
     const state = { hand: { black: ["freeze", "teleport", "retreat"] } };
     const payload = { user: "black", name: "teleport" };
     removeCardFromHand(state, payload);
-    expect(state.hand.black.length).to.equal(2);
+    expect(state.hand.black).to.have.lengthOf(2);
     expect(state.hand.black[0]).to.equal("freeze");
     expect(state.hand.black[1]).to.equal("retreat");
   });
@@ -99,7 +102,7 @@ describe("mutations", () => {
       ]
     };
     counterSpell(state);
-    expect(state.stack.length).to.equal(1);
+    expect(state.stack).to.have.lengthOf(1);
     expect(state.stack[0].name).to.equal("attack");
   });
 
@@ -127,7 +130,7 @@ describe("mutations", () => {
       ]
     };
     block(state);
-    expect(state.stack.length).to.equal(1);
+    expect(state.stack).to.have.lengthOf(1);
     expect(state.stack[0].name).to.equal("attack");
   });
 });
