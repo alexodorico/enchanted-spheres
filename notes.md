@@ -2,9 +2,17 @@ Arrow keys and number keys 7x7 grid cards/powerups
 
 First to three Have an extremely small pool of well of balanced cards and let them choose
 
-Pick two out of three: Counter attack - Attack them back, take damage Block - Negate Attack Counter Spell - Negate Spell
+Pick two out of three:
 
-Pick three out of five: Confusion - Your opponent cannot play a spell during their next turn - must play on your turn
+Counter attack - Attack them back, take damage
+
+Block - Negate Attack
+
+Counter Spell - Negate Spell
+
+Pick three out of five:
+
+Confusion - Your opponent cannot play a spell during their next turn - must play on your turn
 
 Teleport - Move one space diagonally - must play on your turn
 
