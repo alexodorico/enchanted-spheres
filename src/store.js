@@ -53,7 +53,8 @@ export default new Vuex.Store({
       state.history.unshift(payload);
     },
 
-    toggle(state, property) {
+    toggle(state, payload) {
+      const property = payload.property;
       state[property] = toggle(state[property]);
     },
 
@@ -104,19 +105,23 @@ export default new Vuex.Store({
       const validMove = checkForValidMove(state, payload.coordinates);
       if (validMove) {
         commit("updateStack", payload);
-        commit("toggle", "priority");
+        commit("toggle", payload);
       }
     },
 
     attackIntent({ commit }, payload) {
       commit("updateStack", payload);
-      commit("toggle", "priority");
+      commit("toggle", payload);
     },
 
     playSpell({ commit }, payload) {
       commit("removeCardFromHand", payload);
       commit("updateStack", payload);
-      commit("toggle", "priority");
+      commit("toggle", payload);
+    },
+
+    pass({ commit }, payload) {
+      commit("toggle", payload);
     },
 
     resolveStack({ commit, dispatch, state }) {
@@ -136,10 +141,6 @@ export default new Vuex.Store({
         commit("endGame");
       }
     },
-
-    pass({ commit }) {
-      commit("toggle", "priority");
-    }
   },
   modules: {
     black: Player("black", [0, 0], true),
