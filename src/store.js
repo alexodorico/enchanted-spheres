@@ -7,16 +7,10 @@ function Player(color, dimensions) {
   return {
     namespaced: true,
     state: {
-      color,
-      health: 3,
       hand: new Array(),
-      position: dimensions,
       canPlaySpell: true
     },
     mutations: {
-      updateHealth(state) {
-        state.health = state.health - 1;
-      },
       removeCardFromHand(state, payload) {
         state.hand = state.hand.filter(card => card !== payload.name);
       },
@@ -38,7 +32,15 @@ export default new Vuex.Store({
     stack: new Array(),
     history: new Array(),
     turn: "black",
-    priority: "black"
+    priority: "black",
+    health: {
+      black: 3,
+      white: 3
+    },
+    positions: {
+      black: [0, 0],
+      white: [6, 6]
+    }
   },
   getters: {},
   mutations: {
@@ -55,7 +57,7 @@ export default new Vuex.Store({
     },
 
     updatePosition(state, payload) {
-      state[payload.player].position = payload.coordinates;
+      state.position[payload.player] = payload.coordinates;
     },
 
     logHistory(state, payload) {
@@ -68,12 +70,12 @@ export default new Vuex.Store({
 
     attack(state, payload) {
       const user = toggle(payload.user);
-      state[user].health = state[user].health - 1;
+      state.health[user] = state.health[user] - 1;
     },
 
     counterAttack(state, payload) {
       const user = toggle(payload.user);
-      state[user].health = state[user].health - 1;
+      state.health[user] = state.health[user] - 1;
     },
 
     counterSpell(state) {
