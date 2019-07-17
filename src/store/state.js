@@ -3,7 +3,10 @@ const state = {
   gameEnded: false,
   playersJoined: 0,
   stack: new Array(),
-  history: new Array(),
+  history: {
+    black: [[0, 0]],
+    white: [[6, 6]]
+  },
   turn: "black",
   priority: "black",
   health: {

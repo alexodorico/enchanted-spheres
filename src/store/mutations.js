@@ -14,11 +14,8 @@ const mutations = {
   },
 
   updatePosition(state, payload) {
+    state.history[payload.user].unshift(payload.coordinates);
     state.position[payload.user] = payload.coordinates;
-  },
-
-  logHistory(state, payload) {
-    state.history.unshift(payload);
   },
 
   toggle(state, payload) {

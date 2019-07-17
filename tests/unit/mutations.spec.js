@@ -52,13 +52,15 @@ describe("mutations", () => {
   });
 
   it("updatePosition", () => {
-    const state = { position: { black: [0, 0] } };
+    const state = { position: { black: [0, 0] }, history: { black: [[0, 0]] } };
     const payload = { user: "black", coordinates: [0, 1] };
     updatePosition(state, payload);
-    expect(state.position.black).to.have.lengthOf(2);
     expect(state.position.black).to.be.an("array");
+    expect(state.position.black).to.have.lengthOf(2);
     expect(state.position.black[0]).to.equal(0);
     expect(state.position.black[1]).to.equal(1);
+    expect(state.history.black).to.be.an("array");
+    expect(state.history.black).to.have.lengthOf(2);
   });
 
   it("toggle", () => {
