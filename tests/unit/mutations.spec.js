@@ -1,0 +1,133 @@
+import { expect } from "chai";
+import mutations from "../../src/store/mutations";
+const {
+  startGame,
+  endGame,
+  updateStack,
+  updatePosition,
+  // logHistory,
+  toggle,
+  attack,
+  removeCardFromHand,
+  counterAttack,
+  counterSpell,
+  removeFrozen,
+  freeze,
+  block
+  // teleport,
+  // retreat,
+  // stutter,
+  // timeWarp
+} = mutations;
+
+describe("mutations", () => {
+  it("startGame", () => {
+    const state = { gameStarted: false };
+    startGame(state);
+    expect(state.gameStarted).to.equal(true);
+  });
+
+  it("endGame", () => {
+    const state = { gameEnded: false };
+    endGame(state);
+    expect(state.gameEnded).to.equal(true);
+  });
+
+  it("updateStack", () => {
+    const state = { stack: new Array() };
+    let payload = { user: "black", name: "freeze" };
+
+    // First item added to stack
+    updateStack(state, payload);
+    expect(state.stack.length).to.equal(1);
+    expect(state.stack[0].user).to.equal("black");
+    expect(state.stack[0].name).to.equal("freeze");
+
+    // Second item added to stack
+    payload = { user: "white", name: "teleport" };
+    updateStack(state, payload);
+    expect(state.stack.length).to.equal(2);
+    expect(state.stack[0].user).to.equal("white");
+    expect(state.stack[0].name).to.equal("teleport");
+    expect(state.stack[1].user).to.equal("black");
+    expect(state.stack[1].name).to.equal("freeze");
+  });
+
+  it("updatePosition", () => {
+    const state = { position: { black: [0, 0] } };
+    const payload = { user: "black", coordinates: [0, 1] };
+    updatePosition(state, payload);
+    expect(state.position.black[0]).to.equal(0);
+    expect(state.position.black[1]).to.equal(1);
+  });
+
+  it("toggle", () => {
+    const state = { turn: "black" };
+    const payload = { property: "turn" };
+    toggle(state, payload);
+    expect(state.turn).to.equal("white");
+  });
+
+  it("attack", () => {
+    const state = { health: { black: 3 } };
+    const payload = { user: "white" };
+    attack(state, payload);
+    expect(state.health.black).to.equal(2);
+  });
+
+  it("counterAttack", () => {
+    const state = { health: { black: 3 } };
+    const payload = { user: "white" };
+    counterAttack(state, payload);
+    expect(state.health.black).to.equal(2);
+  });
+
+  it("removeCardFromHand", () => {
+    const state = { hand: { black: ["freeze", "teleport", "retreat"] } };
+    const payload = { user: "black", name: "teleport" };
+    removeCardFromHand(state, payload);
+    expect(state.hand.black.length).to.equal(2);
+    expect(state.hand.black[0]).to.equal("freeze");
+    expect(state.hand.black[1]).to.equal("retreat");
+  });
+
+  it("counterSpell", () => {
+    const state = {
+      stack: [
+        { user: "black", name: "freeze" },
+        { user: "white", name: "attack" }
+      ]
+    };
+    counterSpell(state);
+    expect(state.stack.length).to.equal(1);
+    expect(state.stack[0].name).to.equal("attack");
+  });
+
+  it("removeFrozen", () => {
+    const state = { frozen: { black: true } };
+    const payload = { player: "black" };
+    removeFrozen(state, payload);
+    expect(state.frozen.black).to.equal(false);
+    removeFrozen(state, payload);
+    expect(state.frozen.black).to.equal(false);
+  });
+
+  it("freeze", () => {
+    const state = { frozen: { black: false } };
+    const payload = { user: "white" };
+    freeze(state, payload);
+    expect(state.frozen.black).to.equal(true);
+  });
+
+  it("block", () => {
+    const state = {
+      stack: [
+        { user: "black", name: "freeze" },
+        { user: "white", name: "attack" }
+      ]
+    };
+    block(state);
+    expect(state.stack.length).to.equal(1);
+    expect(state.stack[0].name).to.equal("attack");
+  });
+});
