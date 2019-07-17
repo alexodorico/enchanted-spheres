@@ -61,7 +61,10 @@ const mutations = {
 
   stutter(state, payload) {},
 
-  timeWarp(state, payload) {}
+  timeWarp(state) {
+    state.positions.black = [0, 0];
+    state.positions.white = [6, 6];
+  }
 };
 
 export default mutations;

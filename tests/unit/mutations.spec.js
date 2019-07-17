@@ -5,7 +5,6 @@ const {
   endGame,
   updateStack,
   updatePosition,
-  // logHistory,
   toggle,
   attack,
   removeCardFromHand,
@@ -13,11 +12,11 @@ const {
   counterSpell,
   removeFrozen,
   freeze,
-  block
+  block,
   // teleport,
   // retreat,
   // stutter,
-  // timeWarp
+  timeWarp
 } = mutations;
 
 describe("mutations", () => {
@@ -134,5 +133,14 @@ describe("mutations", () => {
     block(state);
     expect(state.stack).to.have.lengthOf(1);
     expect(state.stack[0].name).to.equal("attack");
+  });
+
+  it("timeWarp", () => {
+    const state = { positions: { black: [2, 2], white: [5, 5] } };
+    timeWarp(state);
+    expect(state.positions.black[0]).to.equal(0);
+    expect(state.positions.black[1]).to.equal(0);
+    expect(state.positions.white[0]).to.equal(6);
+    expect(state.positions.white[1]).to.equal(6);
   });
 });
