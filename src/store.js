@@ -1,28 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createLogger from "vuex/dist/logger";
 
 Vue.use(Vuex);
 
-function Player(color, dimensions) {
-  return {
-    namespaced: true,
-    state: {
-      hand: new Array(),
-      canPlaySpell: true
-    },
-    mutations: {
-      removeCardFromHand(state, payload) {
-        state.hand = state.hand.filter(card => card !== payload.name);
-      },
-      updateSpells(state, value) {
-        state.canPlaySpell = value;
-      }
-    },
-    actions: {},
-    getters: {}
-  };
-}
-import createLogger from "vuex/dist/logger";
 export default new Vuex.Store({
   plugins: [createLogger()],
   state: {
@@ -40,6 +21,14 @@ export default new Vuex.Store({
     positions: {
       black: [0, 0],
       white: [6, 6]
+    },
+    hand: {
+      black: new Array(),
+      white: new Array()
+    },
+    frozen: {
+      black: false;
+      white: false
     }
   },
   getters: {},
@@ -57,7 +46,7 @@ export default new Vuex.Store({
     },
 
     updatePosition(state, payload) {
-      state.position[payload.player] = payload.coordinates;
+      state.position[payload.user] = payload.coordinates;
     },
 
     logHistory(state, payload) {
@@ -73,6 +62,13 @@ export default new Vuex.Store({
       state.health[user] = state.health[user] - 1;
     },
 
+    removeCardFromHand(state, payload) {
+      const user = payload.user;
+      state.hand[user] = state.hand[user].filter(
+        card => card !== payload.name
+      );
+    },
+
     counterAttack(state, payload) {
       const user = toggle(payload.user);
       state.health[user] = state.health[user] - 1;
@@ -82,9 +78,13 @@ export default new Vuex.Store({
       state.stack.shift();
     },
 
+    removeFrozen(state, payload) {
+      state.frozen[payload.player] = false;
+    },
+
     freeze(state, payload) {
       const user = toggle(payload.user);
-      state[user].canPlaySpell = false;
+      state.frozen[user] = true;
     },
 
     block(state, payload) {
@@ -114,7 +114,7 @@ export default new Vuex.Store({
     },
 
     playSpell({ commit }, payload) {
-      commit(`${payload.user}/removeCardFromHand`, payload);
+      commit("removeCardFromHand", payload);
       commit("updateStack", payload);
       commit("toggle", "priority");
     },
