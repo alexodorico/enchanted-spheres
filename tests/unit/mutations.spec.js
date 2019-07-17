@@ -14,7 +14,7 @@ const {
   freeze,
   block,
   // teleport,
-  // retreat,
+  retreat,
   stutter,
   timeWarp
 } = mutations;
@@ -161,5 +161,26 @@ describe("mutations", () => {
     expect(state.positions.black[1]).to.equal(3);
     expect(state.positions.white[0]).to.equal(3);
     expect(state.positions.white[1]).to.equal(3);
+  });
+
+  it("retreat", () => {
+    const state = {
+      positions: {
+        black: [3, 2],
+        white: [2, 1]
+      },
+      history: {
+        black: [[3, 2], [2, 2], [2, 1]],
+        white: [[2, 1], [1, 1], [0, 1]]
+      }
+    };
+
+    const payload = { user: "black" };
+
+    retreat(state, payload);
+    expect(state.positions.black[0]).to.equal(2);
+    expect(state.positions.black[1]).to.equal(2);
+    expect(state.positions.white[0]).to.equal(2);
+    expect(state.positions.white[1]).to.equal(1);
   });
 });

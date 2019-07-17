@@ -57,7 +57,9 @@ const mutations = {
 
   teleport(state, payload) {},
 
-  retreat(state, payload) {},
+  retreat(state, payload) {
+    state.positions[payload.user] = state.history[payload.user][1];
+  },
 
   stutter(state, payload) {
     state.positions.black = state.history.black[1];
