@@ -17,9 +17,6 @@ function Player(color, dimensions) {
       updateHealth(state) {
         state.health = state.health - 1;
       },
-      updatePosition(state, coordinates) {
-        state.position = coordinates;
-      },
       removeCardFromHand(state, payload) {
         state.hand = state.hand.filter(card => card !== payload.name);
       },
@@ -57,12 +54,21 @@ export default new Vuex.Store({
       state.stack.unshift(payload);
     },
 
+    updatePosition(state, payload) {
+      state[payload.player].position = payload.coordinates;
+    },
+
     logHistory(state, payload) {
       state.history.unshift(payload);
     },
 
     toggle(state, property) {
       state[property] = toggle(state[property]);
+    },
+
+    attack(state, payload) {
+      const user = toggle(payload.user);
+      state[user].health = state[user].health - 1;
     },
 
     counterAttack(state, payload) {
@@ -79,7 +85,9 @@ export default new Vuex.Store({
       state[user].canPlaySpell = false;
     },
 
-    block(state, payload) {},
+    block(state, payload) {
+      state.stack.shift();
+    },
 
     teleport(state, payload) {},
 
@@ -91,20 +99,20 @@ export default new Vuex.Store({
   },
   actions: {
     moveIntent({ commit }, payload) {
-      const validMove = checkForValidMove(payload.coordinates);
+      const validMove = checkForValidMove(state, payload.coordinates);
       if (validMove) {
         commit("updateStack", payload);
         commit("toggle", "priority");
       }
     },
 
-    playSpell({ commit }, payload) {
-      commit(`${payload.user}/removeCardFromHand`, payload);
+    attackIntent({ commit }, payload) {
       commit("updateStack", payload);
       commit("toggle", "priority");
     },
 
-    attackIntent({ commit }, payload) {
+    playSpell({ commit }, payload) {
+      commit(`${payload.user}/removeCardFromHand`, payload);
       commit("updateStack", payload);
       commit("toggle", "priority");
     },
@@ -125,11 +133,6 @@ export default new Vuex.Store({
       }
     },
 
-    attack({ commit }, payload) {
-      const user = toggle(payload.user);
-      commit(`${user}/updateHealth`);
-    },
-
     pass({ commit }) {
       commit("toggle", "priority");
     }
@@ -144,7 +147,7 @@ function toggle(user) {
   return user === "black" ? "white" : "black";
 }
 
-function checkForValidMove(coordinates) {
+function checkForValidMove(state, coordinates) {
   // Current position
   const c = state.position;
 
