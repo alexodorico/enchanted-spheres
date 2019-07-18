@@ -1,36 +1,115 @@
+import { swap } from "./store";
+
 const actions = {
-  playerAction({ commit }, payload) {
-    commit("removeCardFromHand", payload);
-    dispatch("passPriority", payload);
+  spellIntent({ commit }, payload) {
+    dispatch("managePhases", payload);
+    commit(`${payload.user}/removeCardFromHand`, payload);
+    commit("addActionToStack", payload);
+    commit("togglePriority", payload);
+  },
+
+  moveIntent({ commit }, payload) {
+    dispatch("managePhases", payload);
+    commit("addActionToStack", payload);
+    commit("togglePriority", payload);
+  },
+
+  attackIntent({ commit }, payload) {
+    dispatch("managePhases", payload);
+    commit("addActionToStack", payload);
+    commit("togglePriority", payload);
+  },
+
+  managePhases({ commit }, payload) {
+    if (payload.user === state[payload.user].turn && state.stackPhase === 0) {
+      commit("incrementTurnPhase");
+    }
+
+    if (state.stackPhase === 0) {
+      commit("incrementStackPhase");
+    }
   },
 
   passPriority({ commit }, payload) {
-    commit("updateStack", payload);
-    commit("toggle", payload);
-    commit("incrementStackPhase");
-
-    if (state.stackPhase === 2) {
-      dispatch("resolveStack");
-    }
+    dispatch("resolveStack");
+    commit("togglePriority", payload);
   },
 
-  resolveStack({ commit, dispatch, state }) {
+  resolveStack({ commit, dispatch, state }, payload) {
     state.stack.forEach(payload => {
-      commit(payload.name, payload);
+      dispatch(payload.name, payload);
     });
 
     commit("resetStackPhase");
-    dispatch("checkForWin");
+    commit("incrementTurnPhase");
+
+    if (state.turnPhase === 3) {
+      // commit("removeConfusion");
+      commit("resetTurnPhase");
+      commit("togglePriority");
+      commit("toggleTurn");
+    }
   },
 
   checkForWin({ commit, state }) {
-    let winners = ["black", "white"].filter(
-      player => state.health[player] <= 0
+    const winner = ["black", "white"].filter(
+      player => state[player].health <= 0
     );
 
-    if (winners.length) {
-      commit("endGame");
+    if (winner.length) {
+      commit("endGame", { winner });
     }
+  },
+
+  move({ commit }, payload) {
+    commit(`${payload.user}/organicMove`, payload);
+    commit("incrementTurnPhase");
+  },
+
+  attack({ commit }, payload) {
+    const user = swap(payload.user);
+    commit(`${user}/updateHealth`);
+    dispatch("checkForWin");
+    commit("incrementTurnPhase");
+  },
+
+  counterAttack({ commit }, payload) {
+    const user = swap(payload.user);
+    commit(`${user}/updateHealth`);
+    dispatch("checkForWin");
+  },
+
+  counterSpell({ commit }) {
+    commit("removeActionFromStack");
+  },
+
+  removeFrozen({ commit }, payload) {
+    commit(`${payload.user}/removeConfusion`);
+  },
+
+  freeze({ commit }, payload) {
+    const user = swap(payload.user);
+    commit(`${user}/addConfusion`);
+  },
+
+  block({ commit }) {
+    commit("removeActionFromStack");
+  },
+
+  teleport({ commit }, payload) {
+    commit(`${payload.user}/organicMove`, payload);
+  },
+
+  retreat({ commit }, payload) {
+    commit(`${payload.user}/moveToPreviousPosition`);
+  },
+
+  stutter({ commit }) {
+    commit("moveToPreviousPosition");
+  },
+
+  timeWarp({ commit }) {
+    commit("moveToInitialPosition");
   }
 };
 
