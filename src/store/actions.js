@@ -8,20 +8,20 @@ const actions = {
     commit("togglePriority", payload);
   },
 
-  moveIntent({ commit }, payload) {
+  moveIntent({ commit, dispatch }, payload) {
     dispatch("managePhases", payload);
     commit("addActionToStack", payload);
     commit("togglePriority", payload);
   },
 
-  attackIntent({ commit }, payload) {
+  attackIntent({ commit, dispatch }, payload) {
     dispatch("managePhases", payload);
     commit("addActionToStack", payload);
     commit("togglePriority", payload);
   },
 
-  managePhases({ commit }, payload) {
-    if (payload.user === state[payload.user].turn && state.stackPhase === 0) {
+  managePhases({ commit, state }, payload) {
+    if (state[payload.user].turn && state.stackPhase === 0) {
       commit("incrementTurnPhase");
     }
 
@@ -30,7 +30,7 @@ const actions = {
     }
   },
 
-  passPriority({ commit }, payload) {
+  passPriority({ commit, dispatch }, payload) {
     dispatch("resolveStack");
     commit("togglePriority", payload);
   },
