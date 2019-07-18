@@ -4,6 +4,8 @@ First to three Have an extremely small pool of well of balanced cards and let th
 
 ### Pick two out of three:
 
+Play only during opponents turn?
+
 - Counter attack - Attack them back, take damage
 
 - Block - Negate Attack
@@ -11,6 +13,8 @@ First to three Have an extremely small pool of well of balanced cards and let th
 - Counter Spell - Negate Spell
 
 ### Pick three out of five:
+
+Only play on your turn?
 
 - Confusion - Your opponent cannot play a spell during their next turn - must play on your turn
 
