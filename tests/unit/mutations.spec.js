@@ -1,5 +1,4 @@
 import mutations from "../../src/store/mutations";
-import { exportAllDeclaration } from "@babel/types";
 
 describe("startGame", () => {
   it("changes gameStarted to true", () => {
