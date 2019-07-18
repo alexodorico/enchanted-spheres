@@ -10,6 +10,7 @@ describe("actions", () => {
     };
 
     actions.spellIntent({ commit, dispatch }, payload);
+
     expect(dispatch).toHaveBeenCalledWith("managePhases", payload);
     expect(commit).toHaveBeenCalledWith("black/removeCardFromHand", payload);
     expect(commit).toHaveBeenCalledWith("addActionToStack", payload);
@@ -25,6 +26,7 @@ describe("actions", () => {
     };
 
     actions.moveIntent({ commit, dispatch }, payload);
+
     expect(dispatch).toHaveBeenCalledWith("managePhases", payload);
     expect(commit).toHaveBeenCalledWith("addActionToStack", payload);
     expect(commit).toHaveBeenCalledWith("togglePriority", payload);
@@ -39,6 +41,7 @@ describe("actions", () => {
     };
 
     actions.attackIntent({ commit, dispatch }, payload);
+
     expect(dispatch).toHaveBeenCalledWith("managePhases", payload);
     expect(commit).toHaveBeenCalledWith("addActionToStack", payload);
     expect(commit).toHaveBeenCalledWith("togglePriority", payload);
@@ -60,6 +63,7 @@ describe("actions", () => {
     const commit = jest.fn();
 
     actions.managePhases({ commit, state }, payload);
+
     expect(commit).toHaveBeenCalledWith("incrementTurnPhase");
   });
 
@@ -79,6 +83,7 @@ describe("actions", () => {
     const commit = jest.fn();
 
     actions.managePhases({ commit, state }, payload);
+
     expect(commit).not.toHaveBeenCalled();
   });
 
@@ -98,6 +103,7 @@ describe("actions", () => {
     const commit = jest.fn();
 
     actions.managePhases({ commit, state }, payload);
+
     expect(commit).not.toHaveBeenCalled();
   });
 
@@ -111,6 +117,7 @@ describe("actions", () => {
     const dispatch = jest.fn();
 
     actions.passPriority({ commit, dispatch }, payload);
+
     expect(commit).toHaveBeenCalledWith("togglePriority", payload);
     expect(dispatch).toHaveBeenCalledWith("resolveStack");
   });
@@ -129,6 +136,7 @@ describe("actions", () => {
     const dispatch = jest.fn();
 
     actions.resolveStack({ commit, dispatch, state });
+
     expect(dispatch).toHaveBeenCalledTimes(3);
     expect(dispatch).toHaveBeenCalledWith("freeze", {
       name: "freeze",
@@ -166,8 +174,165 @@ describe("actions", () => {
     const dispatch = jest.fn();
 
     actions.resolveStack({ commit, dispatch, state });
+
     expect(commit).toHaveBeenCalledWith("resetTurnPhase");
     expect(commit).toHaveBeenCalledWith("togglePriority");
     expect(commit).toHaveBeenCalledWith("toggleTurn");
+  });
+
+  it("checkForConfusion", () => {
+    const state = {
+      black: {
+        turn: true
+      },
+      white: {
+        turn: false
+      }
+    };
+
+    const commit = jest.fn();
+
+    actions.checkForConfusion({ commit, state });
+
+    expect(commit).toHaveBeenCalledWith("black/removeConfusion");
+    expect(commit).not.toHaveBeenCalledWith("white/removeConfusion");
+  });
+
+  it("checkForWin: when there's a winner", () => {
+    const state = {
+      black: {
+        health: 2
+      },
+      white: {
+        health: 0
+      }
+    };
+
+    const commit = jest.fn();
+
+    actions.checkForWin({ commit, state });
+
+    expect(commit).toHaveBeenCalledWith("endGame", { winner: ["white"] });
+  });
+
+  it("checkForWin: when there's no winner", () => {
+    const state = {
+      black: {
+        health: 2
+      },
+      white: {
+        health: 1
+      }
+    };
+
+    const commit = jest.fn();
+
+    actions.checkForWin({ commit, state });
+
+    expect(commit).not.toHaveBeenCalledWith("endGame");
+  });
+
+  it("move", () => {
+    const payload = {
+      user: "black",
+      coordinates: [0, 1]
+    };
+
+    const commit = jest.fn();
+
+    actions.move({ commit }, payload);
+
+    expect(commit).toHaveBeenCalledWith("black/organicMove", payload);
+    expect(commit).toHaveBeenCalledWith("incrementTurnPhase");
+  });
+
+  it("attack", () => {
+    const payload = {
+      user: "black"
+    };
+
+    const commit = jest.fn();
+    const dispatch = jest.fn();
+
+    actions.attack({ commit, dispatch }, payload);
+
+    expect(commit).toHaveBeenCalledWith("white/updateHealth");
+    expect(dispatch).toHaveBeenCalledWith("checkForWin");
+    expect(commit).toHaveBeenCalledWith("incrementTurnPhase");
+  });
+
+  it("counterAttack", () => {
+    const payload = {
+      user: "black"
+    };
+
+    const commit = jest.fn();
+    const dispatch = jest.fn();
+
+    actions.counterAttack({ commit, dispatch }, payload);
+
+    expect(commit).toHaveBeenCalledWith("white/updateHealth");
+    expect(dispatch).toHaveBeenCalledWith("checkForWin");
+  });
+
+  it("counterSpell", () => {
+    const commit = jest.fn();
+
+    actions.counterSpell({ commit });
+
+    expect(commit).toHaveBeenCalledWith("removeActionFromStack");
+  });
+
+  it("confusion", () => {
+    const payload = {
+      user: "white"
+    };
+
+    const commit = jest.fn();
+
+    actions.confusion({ commit }, payload);
+    expect(commit).toHaveBeenCalledWith("black/addConfusion");
+  });
+
+  it("block", () => {
+    const commit = jest.fn();
+
+    actions.block({ commit });
+
+    expect(commit).toHaveBeenCalledWith("removeActionFromStack");
+  });
+
+  it("teleport", () => {
+    const payload = {
+      user: "black",
+      coordinate: [0, 1]
+    };
+
+    const commit = jest.fn();
+    actions.teleport({ commit }, payload);
+    expect(commit).toHaveBeenCalledWith("black/organicMove", payload);
+    expect(commit).toHaveBeenCalledWith("incrementTurnPhase");
+  });
+
+  it("retreat", () => {
+    const payload = {
+      user: "black"
+    };
+
+    const commit = jest.fn();
+    actions.retreat({ commit }, payload);
+    expect(commit).toHaveBeenCalledWith("black/moveToPreviousPosition");
+  });
+
+  it("stutter", () => {
+    const commit = jest.fn();
+    actions.stutter({ commit });
+    expect(commit).toHaveBeenCalledWith("moveToPreviousPosition");
+  });
+
+  it("timeWarp", () => {
+    const commit = jest.fn();
+    actions.timeWarp({ commit });
+    expect(commit).toHaveBeenCalledWith("moveToInitialPosition");
   });
 });
