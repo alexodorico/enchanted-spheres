@@ -98,6 +98,7 @@ const actions = {
 
   teleport({ commit }, payload) {
     commit(`${payload.user}/organicMove`, payload);
+    commit("incrementTurnPhase");
   },
 
   retreat({ commit }, payload) {
