@@ -8,7 +8,8 @@ const state = {
     white: [[6, 6]]
   },
   turn: "black",
-  priority: "black",
+  stackPhase: 0,
+  turnPhase: 0,
   health: {
     black: 3,
     white: 3

@@ -14,9 +14,26 @@ const mutations = {
     state.stack.unshift(payload);
   },
 
-  updatePosition(state, payload) {
+  organicMove(state, payload) {
     state.history[payload.user].unshift(payload.coordinates);
+    state.turnPhase = 2;
     state.position[payload.user] = payload.coordinates;
+  },
+
+  incrementStackPhase(state) {
+    state.stackPhase = state.stackPhase + 1;
+  },
+
+  incrementTurnPhase(state) {
+    state.turnPhase = state.turnPhase + 1;
+  },
+
+  resetStackPhase(state) {
+    state.stackPhase = 0;
+  },
+
+  goToTurnPhaseOne(state) {
+    state.turnPhase = 1;
   },
 
   toggle(state, payload) {

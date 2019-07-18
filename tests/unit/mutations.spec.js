@@ -4,7 +4,7 @@ const {
   startGame,
   endGame,
   updateStack,
-  updatePosition,
+  organicMove,
   toggle,
   attack,
   removeCardFromHand,
@@ -51,10 +51,10 @@ describe("mutations", () => {
     expect(state.stack[0]).to.be.an("object");
   });
 
-  it("updatePosition", () => {
+  it("organicMove", () => {
     const state = { position: { black: [0, 0] }, history: { black: [[0, 0]] } };
     const payload = { user: "black", coordinates: [0, 1] };
-    updatePosition(state, payload);
+    organicMove(state, payload);
     expect(state.position.black).to.be.an("array");
     expect(state.position.black).to.have.lengthOf(2);
     expect(state.position.black[0]).to.equal(0);

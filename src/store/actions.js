@@ -1,29 +1,25 @@
 const actions = {
-  moveIntent({ commit }, payload) {
-    commit("updateStack", payload);
-    commit("toggle", payload);
-  },
-
-  attackIntent({ commit }, payload) {
-    commit("updateStack", payload);
-    commit("toggle", payload);
-  },
-
-  playSpell({ commit }, payload) {
+  playerAction({ commit }, payload) {
     commit("removeCardFromHand", payload);
-    commit("updateStack", payload);
-    commit("toggle", payload);
+    dispatch("passPriority", payload);
   },
 
-  pass({ commit }, payload) {
+  passPriority({ commit }, payload) {
+    commit("updateStack", payload);
     commit("toggle", payload);
+    commit("incrementStackPhase");
+
+    if (state.stackPhase === 2) {
+      dispatch("resolveStack");
+    }
   },
 
   resolveStack({ commit, dispatch, state }) {
-    state.stack.forEach(actions => {
-      commit(actions.name, actions);
+    state.stack.forEach(payload => {
+      commit(payload.name, payload);
     });
 
+    commit("resetStackPhase");
     dispatch("checkForWin");
   },
 
