@@ -35,7 +35,7 @@ const actions = {
     commit("togglePriority", payload);
   },
 
-  resolveStack({ commit, dispatch, state }, payload) {
+  resolveStack({ commit, dispatch, state }) {
     state.stack.forEach(payload => {
       dispatch(payload.name, payload);
     });
@@ -44,10 +44,18 @@ const actions = {
     commit("incrementTurnPhase");
 
     if (state.turnPhase === 3) {
-      // commit("removeConfusion");
       commit("resetTurnPhase");
       commit("togglePriority");
       commit("toggleTurn");
+      dispatch("checkForConfusion");
+    }
+  },
+
+  checkForConfusion({ commit, state }) {
+    if (state.black.turn) {
+      commit("black/removeConfusion");
+    } else {
+      commit("white/removeConfusion");
     }
   },
 
@@ -66,14 +74,14 @@ const actions = {
     commit("incrementTurnPhase");
   },
 
-  attack({ commit }, payload) {
+  attack({ commit, dispatch }, payload) {
     const user = swap(payload.user);
     commit(`${user}/updateHealth`);
     dispatch("checkForWin");
     commit("incrementTurnPhase");
   },
 
-  counterAttack({ commit }, payload) {
+  counterAttack({ commit, dispatch }, payload) {
     const user = swap(payload.user);
     commit(`${user}/updateHealth`);
     dispatch("checkForWin");
@@ -83,11 +91,7 @@ const actions = {
     commit("removeActionFromStack");
   },
 
-  removeFrozen({ commit }, payload) {
-    commit(`${payload.user}/removeConfusion`);
-  },
-
-  freeze({ commit }, payload) {
+  confusion({ commit }, payload) {
     const user = swap(payload.user);
     commit(`${user}/addConfusion`);
   },
