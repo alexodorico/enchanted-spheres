@@ -29,7 +29,7 @@ const mutations = {
 
   endGame(state, payload) {
     state.gameEnded = true;
-    state.winner = payload.winner;
+    state.winner = payload.winner[0];
   }
 };
 
