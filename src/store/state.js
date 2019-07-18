@@ -1,32 +1,52 @@
-const state = {
-  gameStarted: true,
-  gameEnded: false,
-  playersJoined: 0,
-  stack: new Array(),
-  history: {
-    black: [[0, 0]],
-    white: [[6, 6]]
-  },
-  turn: "black",
-  stackPhase: 0,
-  turnPhase: 0,
-  health: {
-    black: 3,
-    white: 3
-  },
-  positions: {
-    black: [0, 0],
-    white: [6, 6]
-  },
-  hand: {
-    black: new Array(),
-    white: new Array()
-  },
-  frozen: {
-    black: false,
-    white: false
-  },
-  winner: false
-};
+export function Player(dimensions, firstTurn) {
+  return {
+    namespaced: true,
+    state: {
+      health: 3,
+      hand: new Array(),
+      position: dimensions,
+      confused: false,
+      turn: firstTurn,
+      priority: firstTurn,
+      history: [dimensions]
+    },
+    mutations: {
+      updateHealth(state) {
+        state.health = state.health - 1;
+      },
 
-export default state;
+      removeCardFromHand(state, payload) {
+        state.hand = state.hand.filter(card => card !== payload.name);
+      },
+
+      organicMove(state, payload) {
+        state.history[payload.user].unshift(payload.coordinates);
+        state.position[payload.user] = payload.coordinates;
+      },
+
+      moveToPreviousPosition(state) {
+        state.position = state.history[1];
+      },
+
+      moveToInitialPosition(state) {
+        state.position = state.history[-1];
+      },
+
+      addConfusion(state) {
+        state.confused = true;
+      },
+
+      removeConfusion(state) {
+        state.confused = false;
+      },
+
+      togglePriority(state) {
+        state.priority = !state.priority;
+      },
+
+      toggleTurn(state) {
+        state.turn = !state.turn;
+      }
+    }
+  };
+}
