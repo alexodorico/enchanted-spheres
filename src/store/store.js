@@ -1,22 +1,15 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createLogger from "vuex/dist/logger";
-import { Player } from "./state";
+import { Player } from "./modules/playerStore";
+import state from "./state";
 import mutations from "./mutations";
 import actions from "./actions";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
-    gameStarted: true,
-    gameEnded: false,
-    playersJoined: 0,
-    stack: new Array(),
-    stackPhase: 0,
-    turnPhase: 0,
-    winner: false
-  },
+  state,
   mutations,
   actions,
   modules: {

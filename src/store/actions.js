@@ -1,7 +1,7 @@
 import { swap } from "./store";
 
 const actions = {
-  spellIntent({ commit }, payload) {
+  spellIntent({ commit, dispatch }, payload) {
     dispatch("managePhases", payload);
     commit(`${payload.user}/removeCardFromHand`, payload);
     commit("addActionToStack", payload);

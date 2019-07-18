@@ -1,5 +1,3 @@
-import { swap } from "./store";
-
 const mutations = {
   startGame(state) {
     state.gameStarted = true;
