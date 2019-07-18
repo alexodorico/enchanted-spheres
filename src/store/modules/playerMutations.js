@@ -8,8 +8,8 @@ const mutations = {
   },
 
   organicMove(state, payload) {
-    state.history[payload.user].unshift(payload.coordinates);
-    state.position[payload.user] = payload.coordinates;
+    state.history.unshift(payload.coordinates);
+    state.position = payload.coordinates;
   },
 
   moveToPreviousPosition(state) {
@@ -17,7 +17,7 @@ const mutations = {
   },
 
   moveToInitialPosition(state) {
-    state.position = state.history[-1];
+    state.position = state.history[state.history.length - 1];
   },
 
   addConfusion(state) {
