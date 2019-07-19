@@ -4,7 +4,7 @@ const mutations = {
   },
 
   removeCardFromHand(state, payload) {
-    state.hand = state.hand.filter(card => card !== payload.name);
+    state.hand = state.hand.filter(card => card.name !== payload.name);
   },
 
   organicMove(state, payload) {
@@ -13,7 +13,9 @@ const mutations = {
   },
 
   moveToPreviousPosition(state) {
-    state.position = state.history[1];
+    if (state.history.length > 1) {
+      state.position = state.history[1];
+    }
   },
 
   moveToInitialPosition(state) {
@@ -26,14 +28,6 @@ const mutations = {
 
   removeConfusion(state) {
     state.confused = false;
-  },
-
-  togglePriority(state) {
-    state.priority = !state.priority;
-  },
-
-  toggleTurn(state) {
-    state.turn = !state.turn;
   }
 };
 
