@@ -1,5 +1,5 @@
 <template>
-  <div class="tile">
+  <div class="tile" @click="moveUser">
     <div v-if="black">black</div>
     <div v-if="white">white</div>
   </div>
@@ -13,11 +13,19 @@ export default {
     indexX: Number,
     indexY: Number
   },
+  methods: {
+    moveUser() {
+      this.$store.dispatch("moveIntent", {
+        user: `${this.$store.state.black.priority ? "black" : "white"}`,
+        coordinates: [this.indexX, this.indexY],
+        name: "move"
+      });
+    }
+  },
   computed: {
     ...mapState({
       blackPosition: state => state.black.position,
       whitePosition: state => state.white.position
-
     }),
     black() {
       const x = this.blackPosition[0] === this.indexX;
@@ -30,7 +38,7 @@ export default {
       return x && y;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
