@@ -2,6 +2,8 @@
   <div>
     <h1>Turn: {{this.$store.state.black.turn ? "black" : "white"}}</h1>
     <h2>Priority: {{ user }}</h2>
+    <h3>Black health: {{ this.$store.state.black.health }}</h3>
+    <h3>White health: {{ this.$store.state.white.health }}</h3>
     <PassButton :user="user"/>
     <SpellList :user="user"/>
   </div>

@@ -44,8 +44,12 @@ export default {
     },
     checkForAttack() {
       const r = [this.indexX, this.indexY]; // requested position
+      const opponent = this.$store.state.black.turn ? "white" : "black";
 
-      if (r[0] === this.whitePosition[0] && r[1] === this.whitePosition[1]) {
+      if (
+        r[0] === this.$store.state[opponent].position[0] &&
+        r[1] === this.$store.state[opponent].position[1]
+      ) {
         return true;
       }
 
