@@ -11,6 +11,10 @@ const mutations = {
     state.stack.shift();
   },
 
+  clearStack(state) {
+    state.stack = new Array();
+  },
+
   incrementStackPhase(state) {
     state.stackPhase = state.stackPhase + 1;
   },
@@ -30,6 +34,24 @@ const mutations = {
   endGame(state, payload) {
     state.gameEnded = true;
     state.winner = payload.winner[0];
+  },
+
+  togglePriority(state) {
+    state.black.priority = !state.black.priority;
+    state.white.priority = !state.white.priority;
+  },
+
+  toggleTurn(state) {
+    state.black.turn = !state.black.turn;
+    state.white.turn = !state.white.turn;
+
+    if (state.black.turn) {
+      state.black.priority = true;
+      state.white.priority = false;
+    } else {
+      state.black.priority = false;
+      state.white.priority = true;
+    }
   }
 };
 
