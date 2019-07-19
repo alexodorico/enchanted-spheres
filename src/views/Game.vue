@@ -1,7 +1,7 @@
 <template>
-  <div class="home">
-    <Row v-for="i in 7" :key="i - 1" :indexY="i - 1"/>
-    <Controls :user="this.$store.state.white.priority ? 'white' : 'black'"/>
+  <div>
+    <Row v-for="i in 7" :key="i - 1" :user="user" :indexY="i - 1"/>
+    <Controls :user="user"/>
   </div>
 </template>
 
@@ -13,6 +13,11 @@ export default {
   components: {
     Row,
     Controls
+  },
+  computed: {
+    user: function() {
+      return this.$store.state.white.priority ? "white" : "black";
+    }
   }
 };
 </script>

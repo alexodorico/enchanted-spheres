@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <Tile v-for="i in 7" :key="i - 1" :indexY="indexY" :indexX="i - 1" />
+    <Tile v-for="i in 7" :key="i - 1" :indexY="indexY" :user="user" :indexX="i - 1"/>
   </div>
 </template>
 
@@ -12,9 +12,10 @@ export default {
     Tile
   },
   props: {
-    indexY: Number
+    indexY: Number,
+    user: String
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
