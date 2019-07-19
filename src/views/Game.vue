@@ -1,56 +1,21 @@
 <template>
   <div class="home">
-    <Test/>
-    <button @click="updatePosition">update position</button>
-    <button @click="castFreeze">Cast Freeze</button>
-    <button @click="resolveStack">Resolve Stack</button>
-    <button @click="attack">Attack</button>
-    <button @click="checkForWinner">win condition?</button>
-    <button @click="counterAttack">counter attack</button>
+    <Row v-for="i in 7" :key="i - 1" :indexY="i - 1" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import Test from "@/components/Test.vue";
+import Row from "@/components/Row";
 
 export default {
-  name: "game",
   components: {
-    Test
-  },
-  methods: {
-    toggleTurn: function() {
-      this.$store.commit("toggle", "turn");
-    },
-    togglePriority: function() {
-      this.$store.commit("toggle", "priority");
-    },
-    updateHealth: function() {
-      this.$store.commit("black/updateHealth", -1);
-    },
-    castFreeze: function() {
-      this.$store.dispatch("playSpell", { user: "black", name: "freeze" });
-    },
-    resolveStack: function() {
-      this.$store.dispatch("resolveStack");
-    },
-    attack: function() {
-      // who is attacking
-      this.$store.dispatch("attackIntent", {user: "black", name: "attack"});
-    },
-
-    updatePosition: function() {
-      console.log('yo');
-    },
-
-    checkForWinner: function() {
-      this.$store.dispatch("checkForWin");
-    },
-
-    counterAttack: function() {
-      this.$store.dispatch("playSpell", {user: "black", name:  "counterAttack"});
-    }
+    Row
   }
 };
 </script>
+
+<style lang="scss">
+* {
+  box-sizing: border-box;
+}
+</style>
