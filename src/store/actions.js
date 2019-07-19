@@ -1,53 +1,55 @@
 import { swap } from "./store";
+import { cpus } from "os";
 
 const actions = {
-  spellIntent({ commit, dispatch }, payload) {
-    dispatch("managePhases", payload);
-    commit(`${payload.user}/removeCardFromHand`, payload);
-    commit("addActionToStack", payload);
-    commit("togglePriority", payload);
+  async spellIntent({ commit, dispatch }, payload) {
+    await dispatch("managePhases", payload);
+    await commit(`${payload.user}/removeCardFromHand`, payload);
+    await commit("addActionToStack", payload);
+    await commit("togglePriority");
   },
 
-  moveIntent({ commit, dispatch }, payload) {
-    dispatch("managePhases", payload);
-    commit("addActionToStack", payload);
-    commit("togglePriority", payload);
+  async moveIntent({ commit, dispatch }, payload) {
+    await dispatch("managePhases", payload);
+    await commit("addActionToStack", payload);
+    await commit("togglePriority", payload);
   },
 
-  attackIntent({ commit, dispatch }, payload) {
-    dispatch("managePhases", payload);
-    commit("addActionToStack", payload);
-    commit("togglePriority", payload);
+  async attackIntent({ commit, dispatch }, payload) {
+    await dispatch("managePhases", payload);
+    await commit("addActionToStack", payload);
+    await commit("togglePriority", payload);
   },
 
-  managePhases({ commit, state }, payload) {
-    if (state[payload.user].turn && state.stackPhase === 0) {
-      commit("incrementTurnPhase");
-    }
+  managePhases({ commit, state }) {
+    commit("incrementTurnPhase");
 
     if (state.stackPhase === 0) {
       commit("incrementStackPhase");
     }
   },
 
-  passPriority({ commit, dispatch }, payload) {
-    dispatch("resolveStack");
-    commit("togglePriority", payload);
+  async passPriority({ commit, dispatch, state }, payload) {
+    if (payload.user && state[payload.user].turn) {
+      await commit("incrementTurnPhase");
+    }
+
+    await commit("togglePriority", payload);
+    await dispatch("resolveStack");
   },
 
-  resolveStack({ commit, dispatch, state }) {
-    state.stack.forEach(payload => {
-      dispatch(payload.name, payload);
-    });
+  async resolveStack({ commit, dispatch, state }) {
+    for (let action of state.stack) {
+      await dispatch(action.name, action);
+    }
 
-    commit("resetStackPhase");
-    commit("incrementTurnPhase");
+    await commit("clearStack");
+    await commit("resetStackPhase");
 
-    if (state.turnPhase === 3) {
-      commit("resetTurnPhase");
-      commit("togglePriority");
-      commit("toggleTurn");
-      dispatch("checkForConfusion");
+    if (state.turnPhase >= 3) {
+      await commit("resetTurnPhase");
+      await dispatch("checkForConfusion");
+      await commit("toggleTurn");
     }
   },
 
@@ -71,20 +73,21 @@ const actions = {
 
   move({ commit }, payload) {
     commit(`${payload.user}/organicMove`, payload);
-    commit("incrementTurnPhase");
   },
 
-  attack({ commit, dispatch }, payload) {
+  async attack({ commit, dispatch }, payload) {
     const user = swap(payload.user);
-    commit(`${user}/updateHealth`);
-    dispatch("checkForWin");
-    commit("incrementTurnPhase");
+    await commit(`${user}/updateHealth`);
+    await dispatch("checkForWin");
   },
 
-  counterAttack({ commit, dispatch }, payload) {
+  /*
+    Card Actions
+  */
+  async counterAttack({ commit, dispatch }, payload) {
     const user = swap(payload.user);
-    commit(`${user}/updateHealth`);
-    dispatch("checkForWin");
+    await commit(`${user}/updateHealth`);
+    await dispatch("checkForWin");
   },
 
   counterSpell({ commit }) {
@@ -101,8 +104,8 @@ const actions = {
   },
 
   teleport({ commit }, payload) {
-    commit(`${payload.user}/organicMove`, payload);
-    commit("incrementTurnPhase");
+    const user = swap(payload.user);
+    commit(`${user}/moveToPreviousPosition`, payload);
   },
 
   retreat({ commit }, payload) {
@@ -110,11 +113,13 @@ const actions = {
   },
 
   stutter({ commit }) {
-    commit("moveToPreviousPosition");
+    commit("black/moveToPreviousPosition");
+    commit("white/moveToPreviousPosition");
   },
 
   timeWarp({ commit }) {
-    commit("moveToInitialPosition");
+    commit("black/moveToInitialPosition");
+    commit("white/moveToInitialPosition");
   }
 };
 
