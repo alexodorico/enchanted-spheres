@@ -14,13 +14,19 @@ export default {
     indexY: Number,
     user: String
   },
-  methods: {
+  data() {
+    return {
+      moveSelected: false
+    }
+  },
+  methods: { 
     userMove() {
       this.$store.dispatch("moveIntent", {
         user: `${this.$store.state.black.priority ? "black" : "white"}`,
         coordinates: [this.indexX, this.indexY],
         name: "move"
       });
+      this.moveSelected = true;
     },
     userAttack() {
       this.$store.dispatch("attackIntent", {
@@ -29,14 +35,16 @@ export default {
       });
     },
     handleClick() {
-      const isValidMove = this.checkForValidMove();
-      const isAttack = this.checkForAttack();
+      if (!this.moveSelected) {
+        const isValidMove = this.checkForValidMove();
+        const isAttack = this.checkForAttack();
 
-      if (isValidMove) {
-        if (isAttack) {
-          this.userAttack();
-        } else {
-          this.userMove();
+        if (isValidMove) {
+          if (isAttack) {
+            return this.userAttack();
+          } else {
+            return this.userMove();
+          }
         }
       }
 
@@ -57,7 +65,7 @@ export default {
     },
     checkForValidMove() {
       const r = [this.indexX, this.indexY]; // requested position
-      const c = this.$store.state[this.user].position; // current position
+      const c = this.$store.state[this.$store.state.white.priority ? "white" : "black"].position; // current position
       const d = [Math.abs(c[0] - r[0]), Math.abs(c[1] - r[1])]; // distance requested
       const onBoard = r[0] <= 6 && r[1] <= 6 && (r[0] >= 0 && r[1] >= 0); // within 7x7 grid
       const validMove = (d[0] == 1 && d[1] == 0) || (d[0] == 0 && d[1] == 1); // Not diagonal and one space
