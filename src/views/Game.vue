@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     user: function() {
-      return this.$store.state.white.priority ? "white" : "black";
+      return this.$store.state.player;
     }
   }
 };
