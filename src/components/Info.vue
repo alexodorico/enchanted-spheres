@@ -5,7 +5,7 @@
         <h2>Black</h2>
         <div class="score">{{ this.$store.state.black.health }}</div>
         <div :class="this.$store.state.black.turn ? 'marker' : 'transparent marker'"></div>
-        <div :class="user === 'black' ? 'marker' : 'transparent marker'"></div>
+        <div :class="this.$store.state.black.priority ? 'marker' : 'transparent marker'"></div>
       </div>
       <div class="game-info">
         <h3>Health</h3>
@@ -16,10 +16,11 @@
         <h2>White</h2>
         <div class="score">{{ this.$store.state.white.health }}</div>
         <div :class="this.$store.state.white.turn ? 'marker' : 'transparent marker'"></div>
-        <div :class="user === 'white' ? 'marker' : 'transparent marker'"></div>
+        <div :class="this.$store.state.white.priority ? 'marker' : 'transparent marker'"></div>
       </div>
     </div>
-    <PassButton :user="user"/>
+  <div>You are {{this.user}} </div>
+    <PassButton :user="this.$store.state.black.priority ? 'black' : 'white'"/>
     <div id="spell-wrapper">
       <SpellList :user="user"/>
     </div>
@@ -37,11 +38,6 @@ export default {
   },
   props: {
     user: String
-  },
-  methods: {
-    pass() {
-      this.$store.dispatch("passPriority", { user: this.user });
-    }
   }
 };
 </script>
