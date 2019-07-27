@@ -5,7 +5,8 @@ const state = {
   stack: new Array(),
   stackPhase: 0,
   turnPhase: 0,
-  winner: false
+  winner: false,
+  player: "black"
 };
 
 export default state;
