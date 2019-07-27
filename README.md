@@ -2,7 +2,7 @@
 
 ## Summary
 
-In Enchanted Stones, you play as a sorcerers that control a magic dueling rocks. The goal of the game is to reduce your opponents life total to zero, while playing and countering spells that alter movement.
+In Enchanted Stones, you play as a sorcerer that controls a magic dueling rock. The goal of the game is to reduce your opponents life total to zero, while playing and countering spells that alter movement.
 
 ## Turn Structure
 
