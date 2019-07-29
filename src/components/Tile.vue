@@ -18,24 +18,17 @@ export default {
   data() {
     return {
       moveSelected: false
-    }
+    };
   },
-  methods: { 
+  methods: {
     userMove() {
       const payload = {
         user: `${this.blackPriority ? "black" : "white"}`,
         coordinates: [this.indexX, this.indexY],
         name: "move"
-      }
+      };
 
-      // this.$store.dispatch("moveIntent", {
-      //   user: `${this.blackPriority ? "black" : "white"}`,
-      //   coordinates: [this.indexX, this.indexY],
-      //   name: "move"
-      // });
-
-      this.$store.dispatch("moveIntent", { payload });
-      console.log(this.socket);
+      this.$store.dispatch("moveIntent", { ...payload });
 
       this.socket.emit("action", {
         action: "moveIntent",
@@ -48,17 +41,20 @@ export default {
       const payload = {
         user: `${this.blackPriority ? "black" : "white"}`,
         name: "attack"
-      }
+      };
 
-      this.$store.dispatch("attackIntent", { payload });
+      this.$store.dispatch("attackIntent", { ...payload });
 
-      socket.emit("action", {
+      this.socket.emit("action", {
         action: "attackIntent",
         payload
       });
     },
     handleClick() {
-      if (!this.moveSelected) {
+      if (
+        !this.moveSelected &&
+        this.$store.state[this.$store.state.player].priority
+      ) {
         const isValidMove = this.checkForValidMove();
         const isAttack = this.checkForAttack();
 
@@ -90,7 +86,8 @@ export default {
     },
     checkForValidMove() {
       const r = [this.indexX, this.indexY]; // requested position
-      const c = this.$store.state[this.blackPriority ? "black" : "white"].position; // current position
+      const c = this.$store.state[this.blackPriority ? "black" : "white"]
+        .position; // current position
       const d = [Math.abs(c[0] - r[0]), Math.abs(c[1] - r[1])]; // distance requested
       const onBoard = r[0] <= 6 && r[1] <= 6 && (r[0] >= 0 && r[1] >= 0); // within 7x7 grid
       const validMove = (d[0] == 1 && d[1] == 0) || (d[0] == 0 && d[1] == 1); // Not diagonal and one space
