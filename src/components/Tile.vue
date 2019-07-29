@@ -22,7 +22,7 @@ export default {
   methods: { 
     userMove() {
       this.$store.dispatch("moveIntent", {
-        user: `${this.$store.state.black.priority ? "black" : "white"}`,
+        user: `${this.blackPriority ? "black" : "white"}`,
         coordinates: [this.indexX, this.indexY],
         name: "move"
       });
@@ -30,7 +30,7 @@ export default {
     },
     userAttack() {
       this.$store.dispatch("attackIntent", {
-        user: `${this.$store.state.black.priority ? "black" : "white"}`,
+        user: `${this.blackPriority ? "black" : "white"}`,
         name: "attack"
       });
     },
@@ -52,6 +52,8 @@ export default {
     },
     checkForAttack() {
       const r = [this.indexX, this.indexY]; // requested position
+
+      // going to have to change this to this.user === black ? "white" : "black"
       const opponent = this.$store.state.black.turn ? "white" : "black";
 
       if (
@@ -65,7 +67,7 @@ export default {
     },
     checkForValidMove() {
       const r = [this.indexX, this.indexY]; // requested position
-      const c = this.$store.state[this.$store.state.white.priority ? "white" : "black"].position; // current position
+      const c = this.$store.state[this.blackPriority ? "black" : "white"].position; // current position
       const d = [Math.abs(c[0] - r[0]), Math.abs(c[1] - r[1])]; // distance requested
       const onBoard = r[0] <= 6 && r[1] <= 6 && (r[0] >= 0 && r[1] >= 0); // within 7x7 grid
       const validMove = (d[0] == 1 && d[1] == 0) || (d[0] == 0 && d[1] == 1); // Not diagonal and one space
@@ -80,7 +82,8 @@ export default {
   computed: {
     ...mapState({
       blackPosition: state => state.black.position,
-      whitePosition: state => state.white.position
+      whitePosition: state => state.white.position,
+      blackPriority: state => state.black.priority
     }),
     black() {
       const x = this.blackPosition[0] === this.indexX;
