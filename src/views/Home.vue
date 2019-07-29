@@ -21,13 +21,16 @@ export default {
       fetch("http://localhost:3000/joingame")
         .then(response => response.json())
         .then(response => {
-          this.socket = io(`/${response.id}`);
-          this.$emit("socket-connection", io(`/${response.id}`));
+          let socket = io(`http://localhost:3000/${response.id}`);
+          console.log(socket);
+
+          this.$emit("socket-connection", socket);
           this.gameId = response.id;
           this.$store.commit("setPlayerColor", {color: response.color});
-          this.$router.push(`/game/${response.id}`)
-          this.socket.on("action", function(msg) {
-            console.log(msg)
+          this.$router.push(`/game/${response.id}`);
+
+          socket.on("action", function(msg) {
+            console.log(msg);
           });
         });
     }

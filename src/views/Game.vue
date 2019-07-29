@@ -1,7 +1,7 @@
 <template>
   <div id="game-wrapper">
     <div>
-      <Row v-for="i in 7" :key="i - 1" :user="user" :indexY="i - 1"/>
+      <Row v-for="i in 7" :key="i - 1" :user="user" :indexY="i - 1" :socket="socket"/>
     </div>
     <Info :user="user"/>
   </div>
@@ -16,6 +16,7 @@ export default {
     Row,
     Info
   },
+  props: ["socket"],
   computed: {
     user: function() {
       return this.$store.state.player;

@@ -35,6 +35,7 @@ export default {
       // });
 
       this.$store.dispatch("moveIntent", { payload });
+      console.log(this.socket);
 
       this.socket.emit("action", {
         action: "moveIntent",

@@ -11,8 +11,8 @@ export default {
     }
   },
   methods: {
-    setSocket: function(connection) {
-      this.socket = connection;
+    setSocket: function(socket) {
+      this.socket = socket;
     }
   }
 }

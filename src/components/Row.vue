@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <Tile v-for="i in 7" :key="i - 1" :indexY="indexY" :user="user" :indexX="i - 1"/>
+    <Tile v-for="i in 7" :key="i - 1" :indexY="indexY" :user="user" :indexX="i - 1" :socket="socket"/>
   </div>
 </template>
 
@@ -13,7 +13,8 @@ export default {
   },
   props: {
     indexY: Number,
-    user: String
+    user: String,
+    socket: Object
   }
 };
 </script>
