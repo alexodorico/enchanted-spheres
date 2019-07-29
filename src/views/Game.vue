@@ -3,7 +3,7 @@
     <div>
       <Row v-for="i in 7" :key="i - 1" :user="user" :indexY="i - 1" :socket="socket"/>
     </div>
-    <Info :user="user"/>
+    <Info :user="user" :socket="socket"/>
   </div>
 </template>
 
@@ -16,7 +16,9 @@ export default {
     Row,
     Info
   },
-  props: ["socket"],
+  props: {
+    socket: Object
+  },
   computed: {
     user: function() {
       return this.$store.state.player;
