@@ -14,28 +14,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.player-info {
-  h2 {
-    margin-bottom: 0.62em;
-  }
-}
-
-.marker,
-.score {
-  height: 15px;
-  width: 15px;
-  border-radius: 50%;
-  margin: 0 auto 0.95em;
-  text-align: center;
-}
-
-.marker {
-  background-color: #000;
-}
-
-.transparent {
-  background-color: transparent;
-}
-</style>

@@ -26,18 +26,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-* {
-  box-sizing: border-box;
-  font-family: Helvetica, sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-#game-wrapper {
-  display: flex;
-  justify-content: center;
-  padding: 2em;
-}
-</style>

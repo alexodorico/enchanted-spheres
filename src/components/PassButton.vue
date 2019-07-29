@@ -20,15 +20,3 @@ export default {
   }
 };
 </script>
-
-
-<style lang="scss" scoped>
-button {
-  margin: 1rem 2rem;
-  height: 50px;
-  width: 100px;
-  font-size: 16px;
-  background-color: transparent;
-}
-</style>
-

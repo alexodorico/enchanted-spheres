@@ -36,22 +36,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-#info-wrapper {
-  display: flex;
-  justify-content: center;
-  padding: 1em;
-  border: 1px solid #ddd;
-  margin-left: 2em;
-}
-
-.game-info {
-  padding: 2.5em 0.5em 0;
-  text-align: center;
-
-  h3 {
-    margin-bottom: 0.5em;
-  }
-}
-</style>

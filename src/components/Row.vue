@@ -1,6 +1,13 @@
 <template>
   <div class="row">
-    <Tile v-for="i in 7" :key="i - 1" :indexY="indexY" :user="user" :indexX="i - 1" :socket="socket"/>
+    <Tile
+      v-for="i in 7"
+      :key="i - 1"
+      :indexY="indexY"
+      :user="user"
+      :indexX="i - 1"
+      :socket="socket"
+    />
   </div>
 </template>
 
@@ -18,11 +25,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.row {
-  display: flex;
-}
-</style>
-
-

@@ -118,34 +118,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-$tile-size: 80px;
-
-.tile {
-  width: $tile-size;
-  height: $tile-size;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
-  border-radius: 50%;
-  margin: 0.25em;
-}
-
-.player {
-  position: relative;
-  top: $tile-size * (0.4 / 2);
-  left: $tile-size * (0.4 / 2);
-  width: $tile-size * 0.6;
-  height: $tile-size * 0.6;
-  border-radius: 50%;
-}
-
-.black {
-  background-color: #000;
-}
-
-.white {
-  border: 2px solid black;
-}
-</style>
-

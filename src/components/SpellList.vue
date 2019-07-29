@@ -36,26 +36,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-#spell-wrapper {
-  margin-left: 2em;
-}
-
-h2 {
-  text-align: center;
-}
-
-#button-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-button {
-  height: 34.5px;
-  margin-top: 7px;
-  font-size: 12px;
-  background: transparent;
-}
-</style>
-

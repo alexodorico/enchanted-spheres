@@ -3,7 +3,9 @@
     <router-view @find-game="findGame" :socket="socket"/>
   </div>
 </template>
+
 <script>
+import "./main.scss";
 import io from "socket.io-client";
 
 export default {
