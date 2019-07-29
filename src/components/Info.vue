@@ -20,7 +20,11 @@
       </div>
     </div>
     <div>You are {{this.user}}</div>
-    <PassButton :user="this.$store.state.black.priority ? 'black' : 'white'" :socket="socket"/>
+    <PassButton
+      v-if="this.$store.state[this.$store.state.player].priority"
+      :user="this.$store.state.black.priority ? 'black' : 'white'"
+      :socket="socket"
+    />
     <div id="spell-wrapper">
       <SpellList :user="user" :socket="socket"/>
     </div>
