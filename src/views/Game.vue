@@ -1,7 +1,7 @@
 <template>
   <div id="game-wrapper">
     <div>
-      <Row v-for="i in 7" :key="i - 1" :user="user" :indexY="i - 1" :socket="socket"/>
+      <Row v-for="i in 5" :key="i - 1" :user="user" :indexY="i - 1" :socket="socket"/>
     </div>
     <Info :user="user" :socket="socket"/>
   </div>

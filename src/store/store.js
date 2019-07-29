@@ -14,7 +14,7 @@ export default new Vuex.Store({
   actions,
   modules: {
     black: new Player([0, 0], true),
-    white: new Player([6, 6], false)
+    white: new Player([4, 4], false)
   },
   plugins: [createLogger()]
 });

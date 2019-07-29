@@ -89,7 +89,7 @@ export default {
       const c = this.$store.state[this.blackPriority ? "black" : "white"]
         .position; // current position
       const d = [Math.abs(c[0] - r[0]), Math.abs(c[1] - r[1])]; // distance requested
-      const onBoard = r[0] <= 6 && r[1] <= 6 && (r[0] >= 0 && r[1] >= 0); // within 7x7 grid
+      const onBoard = r[0] <= 4 && r[1] <= 4 && (r[0] >= 0 && r[1] >= 0); // within 7x7 grid
       const validMove = (d[0] == 1 && d[1] == 0) || (d[0] == 0 && d[1] == 1); // Not diagonal and one space
 
       if (onBoard && validMove) {
