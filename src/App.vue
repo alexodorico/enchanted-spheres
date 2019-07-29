@@ -12,14 +12,15 @@ export default {
       socket: new Object()
     };
   },
+
   methods: {
-    findGame: function(socket) {
+    findGame: function() {
       fetch("http://localhost:3000/joingame")
         .then(response => response.json())
         .then(response => {
           const socket = io(`http://localhost:3000/${response.id}`);
-          this.socket = socket;
 
+          this.socket = socket;
           this.$store.commit("setPlayerColor", { color: response.color });
           this.$router.push(`/game/${response.id}`);
 
