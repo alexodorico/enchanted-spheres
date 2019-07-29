@@ -1,23 +1,13 @@
 <template>
   <div>
     <div id="info-wrapper">
-      <div class="player-info">
-        <h2>Black</h2>
-        <div class="score">{{ this.$store.state.black.health }}</div>
-        <div :class="this.$store.state.black.turn ? 'marker' : 'transparent marker'"></div>
-        <div :class="this.$store.state.black.priority ? 'marker' : 'transparent marker'"></div>
-      </div>
+      <PlayerInfo color="black"/>
       <div class="game-info">
         <h3>Health</h3>
         <h3>Turn</h3>
         <h3>Priority</h3>
       </div>
-      <div class="player-info">
-        <h2>White</h2>
-        <div class="score">{{ this.$store.state.white.health }}</div>
-        <div :class="this.$store.state.white.turn ? 'marker' : 'transparent marker'"></div>
-        <div :class="this.$store.state.white.priority ? 'marker' : 'transparent marker'"></div>
-      </div>
+      <PlayerInfo color="white"/>
     </div>
     <div>You are {{this.user}}</div>
     <PassButton
@@ -32,11 +22,13 @@
 </template>
 
 <script>
+import PlayerInfo from "./PlayerInfo";
 import SpellList from "./SpellList";
 import PassButton from "./PassButton";
 
 export default {
   components: {
+    PlayerInfo,
     SpellList,
     PassButton
   },
@@ -64,29 +56,4 @@ export default {
     margin-bottom: 0.5em;
   }
 }
-
-.player-info {
-  h2 {
-    margin-bottom: 0.62em;
-  }
-}
-
-.marker,
-.score {
-  height: 15px;
-  width: 15px;
-  border-radius: 50%;
-  margin: 0 auto 0.95em;
-  text-align: center;
-}
-
-.marker {
-  background-color: #000;
-}
-
-.transparent {
-  background-color: transparent;
-}
 </style>
-
-
