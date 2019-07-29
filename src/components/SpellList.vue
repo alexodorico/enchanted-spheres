@@ -1,7 +1,7 @@
 <template>
-  <div id="spell-wrapper">
+  <div id="spell-section">
     <h2>Spells</h2>
-    <div id="button-wrapper">
+    <div class="spell-wrapper">
       <button
         v-for="(spell, i) in this.$store.state[this.user].hand"
         @click="playSpell"

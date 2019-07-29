@@ -1,5 +1,5 @@
 <template>
-  <button @click="pass">Pass for {{ this.user }}</button>
+  <button @click="pass">PASS</button>
 </template>
 
 <script>
