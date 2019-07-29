@@ -16,6 +16,9 @@ export default {
     Row,
     Info
   },
+  props: {
+    color: String
+  },
   computed: {
     user: function() {
       return this.$store.state.player;
