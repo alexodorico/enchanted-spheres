@@ -1,5 +1,4 @@
 import { swap } from "./store";
-import { cpus } from "os";
 
 const actions = {
   async spellIntent({ commit, dispatch }, payload) {
