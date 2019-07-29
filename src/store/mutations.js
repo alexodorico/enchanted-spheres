@@ -1,4 +1,8 @@
 const mutations = {
+  setPlayerColor(state, payload) {
+    state.player = payload.color;
+  },
+
   startGame(state) {
     state.gameStarted = true;
   },
