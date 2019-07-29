@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>You are playing as {{this.user}}</div>
     <div id="info-wrapper">
       <PlayerInfo color="black"/>
       <div class="game-info">
@@ -9,14 +10,11 @@
       </div>
       <PlayerInfo color="white"/>
     </div>
-    <div>You are {{this.user}}</div>
-    <PassButton
-      v-if="this.$store.state[this.$store.state.player].priority"
-      :user="this.$store.state.black.priority ? 'black' : 'white'"
-      :socket="socket"
-    />
-    <div id="spell-wrapper">
-      <SpellList :user="user" :socket="socket"/>
+    <div v-if="this.$store.state[this.$store.state.player].priority">
+      <PassButton :user="this.$store.state.black.priority ? 'black' : 'white'" :socket="socket"/>
+      <div id="spell-wrapper">
+        <SpellList :user="user" :socket="socket"/>
+      </div>
     </div>
   </div>
 </template>
