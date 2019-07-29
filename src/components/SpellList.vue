@@ -15,13 +15,22 @@
 <script>
 export default {
   props: {
-    user: String
+    user: String,
+    socket: Object
   },
   methods: {
     playSpell(e) {
       this.$store.dispatch("spellIntent", {
         name: e.target.getAttribute("name"),
         user: this.user
+      });
+
+      this.socket.emit("action", {
+        action: "spellIntent",
+        payload: {
+          name: e.target.getAttribute("name"),
+          user: this.user
+        }
       });
     }
   }
