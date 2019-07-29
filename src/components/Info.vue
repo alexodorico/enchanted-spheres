@@ -19,10 +19,10 @@
         <div :class="this.$store.state.white.priority ? 'marker' : 'transparent marker'"></div>
       </div>
     </div>
-  <div>You are {{this.user}} </div>
-    <PassButton :user="this.$store.state.black.priority ? 'black' : 'white'"/>
+    <div>You are {{this.user}}</div>
+    <PassButton :user="this.$store.state.black.priority ? 'black' : 'white'" :socket="socket"/>
     <div id="spell-wrapper">
-      <SpellList :user="user"/>
+      <SpellList :user="user" :socket="socket"/>
     </div>
   </div>
 </template>
@@ -37,7 +37,8 @@ export default {
     PassButton
   },
   props: {
-    user: String
+    user: String,
+    socket: Object
   }
 };
 </script>
