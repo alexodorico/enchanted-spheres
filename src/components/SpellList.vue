@@ -1,6 +1,6 @@
 <template>
   <div id="spell-section">
-    <h2>Spells</h2>
+    <h2>spells</h2>
     <div class="spell-wrapper">
       <button
         v-for="(spell, i) in this.$store.state[this.user].hand"

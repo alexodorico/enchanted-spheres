@@ -2,14 +2,15 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  text-shadow: -2px 0 #000, 0 2px #000, 2px 0 #000, 0 -2px #000;
 }
 
 $tile-size: 80px;
-$border: 1px solid rgba(255, 255, 255, 0.15);
+$border: 1px solid rgba(255, 255, 255, 0.075);
 $box-shadow: rgb(0, 0, 0) 0px 3px 7px 0px;
 $border-radius: 10px;
-$header-font: "Unlock";
-$body-font: "Raleway";
+$header-font: "Jolly Lodger", cursive;
+$body-font: "Raleway", sans-serif;
 $body-weight: 700;
 
 $dark: #2c2c2c;
@@ -25,9 +26,8 @@ body {
 h1 {
   text-align: center;
   font-family: $header-font;
-  font-size: 45px;
-  padding: 0.75em;
-  text-shadow: -2px 0 #000, 0 2px #000, 2px 0 #000, 0 -2px #000;
+  font-size: 60px;
+  padding: 0.5em;
   letter-spacing: 2px;
 }
 
@@ -83,6 +83,8 @@ h1 {
 
 .player-info {
   h2 {
+    font-family: $header-font;
+    letter-spacing: 4px;
     margin-bottom: 0.62em;
     font-size: 22px;
   }
@@ -159,16 +161,14 @@ h1 {
   );
 }
 
-h2 {
-  text-align: center;
-}
-
 #spell-section {
   padding: 0 1em;
 
   h2 {
     font-size: 30px;
-    padding: 0.5em 0 0.25em;
+    padding: 0 0 0.25em 1.25em;
+    font-family: $header-font;
+    letter-spacing: 4px;
   }
 }
 
@@ -196,4 +196,5 @@ button {
   border: $border;
   box-shadow: $box-shadow;
   color: $light;
+  text-shadow: none;
 }

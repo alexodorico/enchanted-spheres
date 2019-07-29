@@ -6,7 +6,7 @@
         <Row v-for="i in 5" :key="i - 1" :user="user" :indexY="i - 1" :socket="socket"/>
       </div>
     </div>
-    <SpellList :user="user" :socket="socket"/>
+    <SpellList v-if="this.$store.state[this.$store.state.player].priority" :user="user" :socket="socket"/>
   </div>
 </template>
 
