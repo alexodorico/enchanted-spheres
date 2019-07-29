@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1>Enchanted Spheres</h1>
     <router-view @find-game="findGame" :socket="socket"/>
   </div>
 </template>
