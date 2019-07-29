@@ -16,15 +16,13 @@ export default {
       gameId: 0,
     }
   },
-  props: {
-    color: String
-  },
   methods: {
     findGame: function() {
       fetch("http://localhost:3000/joingame")
         .then(response => response.json())
         .then(response => {
           this.socket = io(`/${response.id}`);
+          this.$emit("socket-connection", io(`/${response.id}`));
           this.gameId = response.id;
           this.$store.commit("setPlayerColor", {color: response.color});
           this.$router.push(`/game/${response.id}`)

@@ -12,7 +12,8 @@ export default {
   props: {
     indexX: Number,
     indexY: Number,
-    user: String
+    user: String,
+    socket: Object
   },
   data() {
     return {
@@ -21,17 +22,38 @@ export default {
   },
   methods: { 
     userMove() {
-      this.$store.dispatch("moveIntent", {
+      const payload = {
         user: `${this.blackPriority ? "black" : "white"}`,
         coordinates: [this.indexX, this.indexY],
         name: "move"
+      }
+
+      // this.$store.dispatch("moveIntent", {
+      //   user: `${this.blackPriority ? "black" : "white"}`,
+      //   coordinates: [this.indexX, this.indexY],
+      //   name: "move"
+      // });
+
+      this.$store.dispatch("moveIntent", { payload });
+
+      this.socket.emit("action", {
+        action: "moveIntent",
+        payload
       });
+
       this.moveSelected = true;
     },
     userAttack() {
-      this.$store.dispatch("attackIntent", {
+      const payload = {
         user: `${this.blackPriority ? "black" : "white"}`,
         name: "attack"
+      }
+
+      this.$store.dispatch("attackIntent", { payload });
+
+      socket.emit("action", {
+        action: "attackIntent",
+        payload
       });
     },
     handleClick() {
