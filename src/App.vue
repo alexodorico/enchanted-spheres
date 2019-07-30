@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>enchanted spheres</h1>
-    <router-view @find-game="findGame" :socket="socket"/>
+    <router-view @find-game="findGame" :socket="socket" :history="history"/>
   </div>
 </template>
 
@@ -12,7 +12,8 @@ import io from "socket.io-client";
 export default {
   data() {
     return {
-      socket: new Object()
+      socket: new Object(),
+      history: new Object()
     };
   },
 
@@ -28,6 +29,7 @@ export default {
           this.$router.push(`/game/${response.id}`);
 
           socket.on("action", message => {
+            this.history = message;
             this.$store.dispatch(message.action, message.payload);
           });
         });

@@ -10,6 +10,7 @@
       <PlayerInfo color="white"/>
     </div>
     <div id="reminder">You are playing as {{this.user}}</div>
+    <History :history="history"/>
     <div v-if="this.$store.state[this.$store.state.player].priority">
       <PassButton :user="this.$store.state.black.priority ? 'black' : 'white'" :socket="socket"/>
     </div>
@@ -19,15 +20,18 @@
 <script>
 import PlayerInfo from "./PlayerInfo";
 import PassButton from "./PassButton";
+import History from "./History";
 
 export default {
   components: {
     PlayerInfo,
-    PassButton
+    PassButton,
+    History
   },
   props: {
     user: String,
-    socket: Object
+    socket: Object,
+    history: Object
   }
 };
 </script>

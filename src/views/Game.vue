@@ -1,12 +1,16 @@
 <template>
   <div id="enchanted-stones">
     <div id="game-wrapper">
-      <Info :user="user" :socket="socket"/>
+      <Info :user="user" :socket="socket" :history="history"/>
       <div id="grid">
         <Row v-for="i in 5" :key="i - 1" :user="user" :indexY="i - 1" :socket="socket"/>
       </div>
     </div>
-    <SpellList v-if="this.$store.state[this.$store.state.player].priority" :user="user" :socket="socket"/>
+    <SpellList
+      v-if="this.$store.state[this.$store.state.player].priority"
+      :user="user"
+      :socket="socket"
+    />
   </div>
 </template>
 
@@ -22,7 +26,8 @@ export default {
     SpellList
   },
   props: {
-    socket: Object
+    socket: Object,
+    history: Object
   },
   computed: {
     user: function() {
