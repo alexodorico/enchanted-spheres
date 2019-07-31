@@ -1,10 +1,7 @@
 <template>
-  <div>
-    <!-- <h1>Enchanted Stones</h1> -->
+  <div id="home">
     <button @click="findGame">Find Game</button>
-    <button>
-      <router-link to="/instructions">Instructions</router-link>
-    </button>
+    <button @click="viewInstructions">Instructions</button>
   </div>
 </template>
 
@@ -13,6 +10,9 @@ export default {
   methods: {
     findGame: function() {
       this.$emit("find-game");
+    },
+    viewInstructions: function() {
+      this.$router.push("/instructions");
     }
   }
 };

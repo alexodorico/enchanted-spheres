@@ -31,6 +31,27 @@ h1 {
   letter-spacing: 2px;
 }
 
+#home {
+  max-width: 300px;
+  margin: 0 auto;
+
+  button {
+    margin: 1em 0;
+  }
+}
+
+#instructions {
+  max-width: 600px;
+  font-size: 16px;
+  margin: 0 auto;
+
+  p,
+  ol,
+  ul {
+    margin-bottom: 1em;
+  }
+}
+
 #enchanted-stones {
   display: flex;
   flex-direction: column;
@@ -57,7 +78,6 @@ h1 {
   display: flex;
   justify-content: center;
   padding: 1em;
-  margin-bottom: 1em;
   border-radius: $border-radius;
   border: $border;
   text-shadow: -2px 0 #000, 0 2px #000, 2px 0 #000, 0 -2px #000;
@@ -67,7 +87,7 @@ h1 {
 #reminder,
 #recent-play {
   padding: 1.5em;
-  margin-bottom: 1em;
+  margin: 1em 0;
   border: $border;
   box-shadow: $box-shadow;
   border-radius: $border-radius;
@@ -199,4 +219,5 @@ button {
   box-shadow: $box-shadow;
   color: $light;
   text-shadow: none;
+  font-family: $body-font;
 }
