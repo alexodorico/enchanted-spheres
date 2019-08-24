@@ -6,8 +6,13 @@ const actions = {
     -These three need to increment stack phase if 
     stack phase = 0.
     -Also need to increment turn phase if stack phase = 0
+    // Could spellIntent and move Intent just be combined 
+    into a general action (declareIntent?)
+    where they manage stack phase, add action to
+    stack and togglePriority???
+    ^^^ no because users can only move on their turn
   */
-  async spellIntent({ commit, dispatch }, payload) {
+  async spellIntent({ commit, dispatch, state }, payload) {
     // Need to take into account users can play spells
     // when it's not their turn
     await dispatch("manageStackPhase", payload);
@@ -17,6 +22,11 @@ const actions = {
   },
 
   // TODO: check for attack
+  //    if a move based card is played in response
+  //    to an attack, attack will not be an attack anymore
+  // This will always increment stack phase,
+  // users can only move on their turn
+  // and cannot move in response to a spell
   async moveIntent({ commit, dispatch }, payload) {
     await dispatch("manageStackPhase", payload);
     await commit("addActionToStack", payload);
@@ -26,20 +36,19 @@ const actions = {
 
   // I don't think this is necessary
   // Check for attack in move intent
-  async attackIntent({ commit, dispatch }, payload) {
-    await dispatch("manageStackPhase", payload);
-    await commit("addActionToStack", payload);
-    await commit("togglePriority", payload);
-  },
+  // async attackIntent({ commit, dispatch }, payload) {
+  //   await dispatch("manageStackPhase", payload);
+  //   await commit("addActionToStack", payload);
+  //   await commit("togglePriority", payload);
+  // },
 
   // This is very wrong, think this might be the source of bugs
   // -Need to check on every action
   // -If an action is on the stack, it doesn't
   // matter who's turn it is, it doesn't increment
+  // stack phase of 1 means that an action was declared
   // -Only passes can move stack phase from 1 - 2
   manageStackPhase({ commit, state }) {
-    commit("incrementTurnPhase");
-
     if (state.stackPhase === 0) {
       commit("incrementStackPhase");
     }
@@ -72,13 +81,18 @@ const actions = {
 
     await commit("clearStack");
     await commit("resetStackPhase");
+    await commit("incrementTurnPhase");
 
     if (state.turnPhase >= 3) {
       await commit("resetTurnPhase");
+
+      // This almost doesn't make sense here, low priority
       await dispatch("checkForConfusion");
+
       await commit("toggleTurn");
     }
   },
+
 
   checkForConfusion({ commit, state }) {
     if (state.black.turn) {
@@ -88,6 +102,8 @@ const actions = {
     }
   },
 
+
+  // At the end of each turn phase...
   checkForWin({ commit, state }) {
     const winner = ["black", "white"].filter(
       player => state[player].health <= 0
