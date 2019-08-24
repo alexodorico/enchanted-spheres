@@ -8,24 +8,31 @@ const actions = {
     -Also need to increment turn phase if stack phase = 0
   */
   async spellIntent({ commit, dispatch }, payload) {
+    // Need to take into account users can play spells
+    // when it's not their turn
     await dispatch("manageStackPhase", payload);
     await commit(`${payload.user}/removeCardFromHand`, payload);
     await commit("addActionToStack", payload);
     await commit("togglePriority");
   },
 
+  // TODO: check for attack
   async moveIntent({ commit, dispatch }, payload) {
     await dispatch("manageStackPhase", payload);
     await commit("addActionToStack", payload);
     await commit("togglePriority", payload);
   },
 
+
+  // I don't think this is necessary
+  // Check for attack in move intent
   async attackIntent({ commit, dispatch }, payload) {
     await dispatch("manageStackPhase", payload);
     await commit("addActionToStack", payload);
     await commit("togglePriority", payload);
   },
 
+  // This is very wrong, think this might be the source of bugs
   // -Need to check on every action
   // -If an action is on the stack, it doesn't
   // matter who's turn it is, it doesn't increment
@@ -53,6 +60,11 @@ const actions = {
     await dispatch("resolveStack");
   },
 
+  // When the stack resolves, that means priority was passed twice
+  // in a row. Stack phase resets
+  // Need to handle where to increment turn phase though
+  // Maybe when declared because spell could get countered...?
+  // but that would still have to resolve
   async resolveStack({ commit, dispatch, state }) {
     for (let action of state.stack) {
       await dispatch(action.name, action);
