@@ -8,7 +8,7 @@ const actions = {
     2.Stack phase will always be 1 if there's
       a card on the stack
   */
-  async spellIntent({ commit, dispatch, state }, payload) {
+  async spellIntent({ commit, dispatch }, payload) {
     // Need to take into account users can play spells
     // when it's not their turn
     await dispatch("manageStackPhase", payload);
@@ -21,7 +21,7 @@ const actions = {
   // This will always increment stack phase as
   // users can only move on their turn
   // and cannot move in response to a spell
-  async moveIntent({ commit, dispatch }, payload) {
+  async moveOrAttackIntent({ commit, dispatch }, payload) {
     await dispatch("manageStackPhase", payload);
     await commit("addActionToStack", payload);
     await commit("togglePriority", payload);
@@ -117,17 +117,22 @@ const actions = {
   },
 
   // Combine move and attack?
-  move({ commit }, payload) {
-    commit(`${payload.user}/organicMove`, payload);
+  moveOrAttack({ commit, state }, payload) {
+    const attack = checkForAttack(state, payload);
+
+    if (attack) {
+      const user = swap(payload.user);
+      await commit(`${user}/updateHealth`);
+      await dispatch("checkForWin");
+    } else {
+      commit(`${payload.user}/organicMove`, payload);
+    }
   },
 
   // check to see if attack is valid
   // before updating health
-  async attack({ commit, dispatch }, payload) {
-    const user = swap(payload.user);
-    await commit(`${user}/updateHealth`);
-    await dispatch("checkForWin");
-  },
+  // async attack({ commit, dispatch }, payload) {
+  // },
 
   /*
     Card Actions

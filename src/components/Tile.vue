@@ -21,65 +21,21 @@ export default {
     };
   },
   methods: {
-    userMove() {
-      const payload = {
-        user: `${this.blackPriority ? "black" : "white"}`,
-        coordinates: [this.indexX, this.indexY],
-        name: "move"
-      };
-
-      this.$store.dispatch("moveIntent", { ...payload });
-
-      this.socket.emit("action", {
-        action: "moveIntent",
-        payload
-      });
-
-      this.moveSelected = true;
-    },
-    userAttack() {
-      const payload = {
-        user: `${this.blackPriority ? "black" : "white"}`,
-        name: "attack"
-      };
-
-      this.$store.dispatch("attackIntent", { ...payload });
-
-      this.socket.emit("action", {
-        action: "attackIntent",
-        payload
-      });
-    },
     handleClick() {
       if (
         !this.moveSelected &&
         this.$store.state[this.$store.state.player].priority
       ) {
         const isValidMove = this.checkForValidMove();
-        const isAttack = this.checkForAttack();
+        // const isAttack = this.checkForAttack();
 
         if (isValidMove) {
-          if (isAttack) {
-            return this.userAttack();
-          } else {
-            return this.userMove();
-          }
+          // if (isAttack) {
+          //   return this.userAttack();
+          // } else {
+          return this.declareIntent();
+          // }
         }
-      }
-
-      return false;
-    },
-    checkForAttack() {
-      const r = [this.indexX, this.indexY]; // requested position
-
-      // going to have to change this to this.user === black ? "white" : "black"
-      const opponent = this.$store.state.black.turn ? "white" : "black";
-
-      if (
-        r[0] === this.$store.state[opponent].position[0] &&
-        r[1] === this.$store.state[opponent].position[1]
-      ) {
-        return true;
       }
 
       return false;
@@ -97,7 +53,52 @@ export default {
       }
 
       return false;
+    },
+    declareIntent() {
+      const payload = {
+        user: `${this.blackPriority ? "black" : "white"}`,
+        coordinates: [this.indexX, this.indexY],
+        name: "moveOrAttack"
+      };
+
+      this.$store.dispatch("moveOrAttackIntent", { ...payload });
+
+      this.socket.emit("action", {
+        action: "moveOrAttackIntent",
+        payload
+      });
+
+      this.moveSelected = true;
     }
+    // this wont be needed
+    // userAttack() {
+    //   const payload = {
+    //     user: `${this.blackPriority ? "black" : "white"}`,
+    //     name: "attack"
+    //   };
+
+    //   this.$store.dispatch("attackIntent", { ...payload });
+
+    //   this.socket.emit("action", {
+    //     action: "attackIntent",
+    //     payload
+    //   });
+    // },
+    // checkForAttack() {
+    //   const r = [this.indexX, this.indexY]; // requested position
+
+    //   // going to have to change this to this.user === black ? "white" : "black"
+    //   const opponent = this.$store.state.black.turn ? "white" : "black";
+
+    //   if (
+    //     r[0] === this.$store.state[opponent].position[0] &&
+    //     r[1] === this.$store.state[opponent].position[1]
+    //   ) {
+    //     return true;
+    //   }
+
+    //   return false;
+    // },
   },
   computed: {
     ...mapState({
