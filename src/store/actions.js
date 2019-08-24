@@ -1,26 +1,36 @@
 import { swap } from "./store";
 
 const actions = {
+
+  /*
+    -These three need to increment stack phase if 
+    stack phase = 0.
+    -Also need to increment turn phase if stack phase = 0
+  */
   async spellIntent({ commit, dispatch }, payload) {
-    await dispatch("managePhases", payload);
+    await dispatch("manageStackPhase", payload);
     await commit(`${payload.user}/removeCardFromHand`, payload);
     await commit("addActionToStack", payload);
     await commit("togglePriority");
   },
 
   async moveIntent({ commit, dispatch }, payload) {
-    await dispatch("managePhases", payload);
+    await dispatch("manageStackPhase", payload);
     await commit("addActionToStack", payload);
     await commit("togglePriority", payload);
   },
 
   async attackIntent({ commit, dispatch }, payload) {
-    await dispatch("managePhases", payload);
+    await dispatch("manageStackPhase", payload);
     await commit("addActionToStack", payload);
     await commit("togglePriority", payload);
   },
 
-  managePhases({ commit, state }) {
+  // -Need to check on every action
+  // -If an action is on the stack, it doesn't
+  // matter who's turn it is, it doesn't increment
+  // -Only passes can move stack phase from 1 - 2
+  manageStackPhase({ commit, state }) {
     commit("incrementTurnPhase");
 
     if (state.stackPhase === 0) {
@@ -28,6 +38,12 @@ const actions = {
     }
   },
 
+
+  // passing priority doesn't always resolve the stack
+  // If it's a user's turn and doesn't take an action and passes instead,
+  // Priority is swapped
+  // If a user passes when it's their turn and no card on stack,
+  // Increment turn phase and no response can be played by opponent
   async passPriority({ commit, dispatch, state }, payload) {
     if (payload.user && state[payload.user].turn) {
       await commit("incrementTurnPhase");
