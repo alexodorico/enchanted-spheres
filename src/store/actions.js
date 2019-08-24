@@ -3,14 +3,10 @@ import { swap } from "./store";
 const actions = {
 
   /*
-    -These three need to increment stack phase if 
-    stack phase = 0.
-    -Also need to increment turn phase if stack phase = 0
-    // Could spellIntent and move Intent just be combined 
-    into a general action (declareIntent?)
-    where they manage stack phase, add action to
-    stack and togglePriority???
-    ^^^ no because users can only move on their turn
+    1.These two need to increment stack phase only if 
+      stack phase = 0.
+    2.Stack phase will always be 1 if there's
+      a card on the stack
   */
   async spellIntent({ commit, dispatch, state }, payload) {
     // Need to take into account users can play spells
@@ -21,10 +17,8 @@ const actions = {
     await commit("togglePriority");
   },
 
-  // TODO: check for attack
-  //    if a move based card is played in response
-  //    to an attack, attack will not be an attack anymore
-  // This will always increment stack phase,
+  // Moves can turn into attacks
+  // This will always increment stack phase as
   // users can only move on their turn
   // and cannot move in response to a spell
   async moveIntent({ commit, dispatch }, payload) {
@@ -33,21 +27,11 @@ const actions = {
     await commit("togglePriority", payload);
   },
 
-
-  // I don't think this is necessary
-  // Check for attack in move intent
-  // async attackIntent({ commit, dispatch }, payload) {
-  //   await dispatch("manageStackPhase", payload);
-  //   await commit("addActionToStack", payload);
-  //   await commit("togglePriority", payload);
-  // },
-
-  // This is very wrong, think this might be the source of bugs
-  // -Need to check on every action
+  // -Need to check on every move or spell declared
   // -If an action is on the stack, it doesn't
-  // matter who's turn it is, it doesn't increment
-  // stack phase of 1 means that an action was declared
-  // -Only passes can move stack phase from 1 - 2
+  // matter who's turn it is, it doesn't increment.
+  // -Stack phase of 1 means that an action was declared
+  // -Only passes can move stack phase from 1 -> 2
   manageStackPhase({ commit, state }) {
     if (state.stackPhase === 0) {
       commit("incrementStackPhase");
@@ -61,19 +45,40 @@ const actions = {
   // If a user passes when it's their turn and no card on stack,
   // Increment turn phase and no response can be played by opponent
   async passPriority({ commit, dispatch, state }, payload) {
+    // this is wrong
+    // if it's a user turn and they pass,
+    // the stack phase will be either zero or one
+    // If it's zero, an opponent cannot play a spell in response
+    // And the turn phase is increment
+    // If it's 1 and they pass, the stack resolves
+    // and turn phase is incremented
     if (payload.user && state[payload.user].turn) {
-      await commit("incrementTurnPhase");
+      if (state.stackPhase === 0) {
+        // If users turn and stack phase is zero
+        // it means no actions are declared
+        // and opponent can't play spell in response.
+        // So passing is considered an action I guess.
+        // Priority isn't toggled here; it will still
+        // be the users priority because they're
+        // just moving to the next turn phase
+        await commit("incrementTurnPhase");
+      } else {
+        // if stack phase is one, it's in a response to a spell
+        // and stack resolves
+        await dispatch("resolveStack");
+      }
+    } else {
+      // if it's your opponents turn and they pass,
+      // the stack resolves because stack phase will 
+      // *always* be 1 when it's opponents priority
+      // during your turn
+      await dispatch("resolveStack");
+      await commit("togglePriority", payload);
     }
-
-    await commit("togglePriority", payload);
-    await dispatch("resolveStack");
   },
 
-  // When the stack resolves, that means priority was passed twice
-  // in a row. Stack phase resets
-  // Need to handle where to increment turn phase though
-  // Maybe when declared because spell could get countered...?
-  // but that would still have to resolve
+  // When the stack resolves, that means
+  // priority was passed twice in a row.
   async resolveStack({ commit, dispatch, state }) {
     for (let action of state.stack) {
       await dispatch(action.name, action);
@@ -84,15 +89,12 @@ const actions = {
     await commit("incrementTurnPhase");
 
     if (state.turnPhase >= 3) {
+      // Users turn is done
       await commit("resetTurnPhase");
-
-      // This almost doesn't make sense here, low priority
       await dispatch("checkForConfusion");
-
       await commit("toggleTurn");
     }
   },
-
 
   checkForConfusion({ commit, state }) {
     if (state.black.turn) {
@@ -103,7 +105,7 @@ const actions = {
   },
 
 
-  // At the end of each turn phase...
+  // This happens at the end of each attack
   checkForWin({ commit, state }) {
     const winner = ["black", "white"].filter(
       player => state[player].health <= 0
@@ -114,10 +116,13 @@ const actions = {
     }
   },
 
+  // Combine move and attack?
   move({ commit }, payload) {
     commit(`${payload.user}/organicMove`, payload);
   },
 
+  // check to see if attack is valid
+  // before updating health
   async attack({ commit, dispatch }, payload) {
     const user = swap(payload.user);
     await commit(`${user}/updateHealth`);
