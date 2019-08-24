@@ -13,6 +13,7 @@
 
 <script>
 import Tile from "./Tile";
+// change to 4x4
 
 export default {
   components: {
