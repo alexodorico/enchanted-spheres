@@ -38,49 +38,16 @@ const actions = {
     }
   },
 
-
-  // passing priority doesn't always resolve the stack
-  // If it's a user's turn and doesn't take an action and passes instead,
-  // Priority is swapped
-  // If a user passes when it's their turn and no card on stack,
-  // Increment turn phase and no response can be played by opponent
+  // Passing priority is basically telling the stack to resolve
+  // If it's not your turn, and three actions haven't been played
+  // yet, pass it back
   async passPriority({ commit, dispatch, state }, payload) {
-    // this is wrong
-    // if it's a user turn and they pass,
-    // the stack phase will be either zero or one
-    // If it's zero, an opponent cannot play a spell in response
-    // And the turn phase is increment
-    // If it's 1 and they pass, the stack resolves
-    // and turn phase is incremented
-    if (payload.user && state[payload.user].turn) {
-      if (state.stackPhase === 0) {
-        // If users turn and stack phase is zero
-        // it means no actions are declared
-        // and opponent can't play spell in response.
-        // So passing is considered an action I guess.
-        // Priority isn't toggled here; it will still
-        // be the users priority because they're
-        // just moving to the next turn phase
-        await commit("incrementTurnPhase");
+    await dispatch("resolveStack");
 
-        if (state.turnPhase >= 3) {
-          // Users turn is done
-          await commit("resetTurnPhase");
-          await dispatch("checkForConfusion");
-          await commit("toggleTurn");
-        }
-      } else {
-        // if stack phase is one, it's in a response to a spell
-        // and stack resolves
-        await dispatch("resolveStack");
+    if (!state[payload.user].turn) {
+      if (state.turnPhase !== 3) {
+        commit("togglePriority");
       }
-    } else {
-      // if it's your opponents turn and they pass,
-      // the stack resolves because stack phase will 
-      // *always* be 1 when it's opponents priority
-      // during your turn
-      await dispatch("resolveStack");
-      await commit("togglePriority", payload);
     }
   },
 
@@ -124,7 +91,7 @@ const actions = {
   },
 
   // Combine move and attack?
-  async moveOrAttack({ commit, state }, payload) {
+  async moveOrAttack({ commit, state, dispatch }, payload) {
     const attack = await checkForAttack(state, payload);
 
     if (attack) {
@@ -135,11 +102,6 @@ const actions = {
       commit(`${payload.user}/organicMove`, payload);
     }
   },
-
-  // check to see if attack is valid
-  // before updating health
-  // async attack({ commit, dispatch }, payload) {
-  // },
 
   /*
     Card Actions

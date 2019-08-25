@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <Tile
-      v-for="i in 5"
+      v-for="i in 4"
       :key="i - 1"
       :indexY="indexY"
       :user="user"
