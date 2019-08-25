@@ -19,12 +19,14 @@ export default {
 
   methods: {
     findGame: function() {
-      // fetch("https://tranquil-caverns-50931.herokuapp.com/joingame")
-      fetch("http://localhost:3000/joingame")
+      fetch("https://tranquil-caverns-50931.herokuapp.com/joingame")
+        //fetch("http://localhost:3000/joingame")
         .then(response => response.json())
         .then(response => {
-          const socket = io(`http://localhost:3000/${response.id}`);
-          //const socket = io(`https://tranquil-caverns-50931.herokuapp.com/${response.id}`);
+          //const socket = io(`http://localhost:3000/${response.id}`);
+          const socket = io(
+            `https://tranquil-caverns-50931.herokuapp.com/${response.id}`
+          );
 
           this.socket = socket;
           this.$store.commit("setPlayerColor", { color: response.color });
