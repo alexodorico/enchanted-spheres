@@ -17,6 +17,8 @@ export default {
   },
   data() {
     return {
+      // MOVE THIS TO STORE
+      // users can't attack from the same space twice
       moveSelected: false
     };
   },
@@ -27,14 +29,9 @@ export default {
         this.$store.state[this.$store.state.player].priority
       ) {
         const isValidMove = this.checkForValidMove();
-        // const isAttack = this.checkForAttack();
 
         if (isValidMove) {
-          // if (isAttack) {
-          //   return this.userAttack();
-          // } else {
           return this.declareIntent();
-          // }
         }
       }
 
@@ -70,35 +67,6 @@ export default {
 
       this.moveSelected = true;
     }
-    // this wont be needed
-    // userAttack() {
-    //   const payload = {
-    //     user: `${this.blackPriority ? "black" : "white"}`,
-    //     name: "attack"
-    //   };
-
-    //   this.$store.dispatch("attackIntent", { ...payload });
-
-    //   this.socket.emit("action", {
-    //     action: "attackIntent",
-    //     payload
-    //   });
-    // },
-    // checkForAttack() {
-    //   const r = [this.indexX, this.indexY]; // requested position
-
-    //   // going to have to change this to this.user === black ? "white" : "black"
-    //   const opponent = this.$store.state.black.turn ? "white" : "black";
-
-    //   if (
-    //     r[0] === this.$store.state[opponent].position[0] &&
-    //     r[1] === this.$store.state[opponent].position[1]
-    //   ) {
-    //     return true;
-    //   }
-
-    //   return false;
-    // },
   },
   computed: {
     ...mapState({
