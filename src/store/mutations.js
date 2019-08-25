@@ -4,6 +4,7 @@ const mutations = {
   },
 
   startGame(state) {
+    state.gameEnded = false;
     state.gameStarted = true;
   },
 
