@@ -37,6 +37,7 @@ const mutations = {
 
   endGame(state, payload) {
     state.gameEnded = true;
+    state.gameStarted = false;
     state.winner = payload.winner[0];
   },
 
