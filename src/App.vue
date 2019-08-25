@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>enchanted stones</h1>
-    <router-view @find-game="findGame" :socket="socket" :history="history"/>
+    <router-view @find-game="findGame" :socket="socket" :history="history" />
   </div>
 </template>
 
@@ -19,10 +19,12 @@ export default {
 
   methods: {
     findGame: function() {
-      fetch("https://tranquil-caverns-50931.herokuapp.com/joingame")
+      // fetch("https://tranquil-caverns-50931.herokuapp.com/joingame")
+      fetch("http://localhost:3000/joingame")
         .then(response => response.json())
         .then(response => {
-          const socket = io(`https://tranquil-caverns-50931.herokuapp.com/${response.id}`);
+          const socket = io(`http://localhost:3000/${response.id}`);
+          //const socket = io(`https://tranquil-caverns-50931.herokuapp.com/${response.id}`);
 
           this.socket = socket;
           this.$store.commit("setPlayerColor", { color: response.color });
@@ -31,6 +33,12 @@ export default {
           socket.on("action", message => {
             this.history = message;
             this.$store.dispatch(message.action, message.payload);
+          });
+
+          socket.on("playerLeft", message => {
+            setTimeout(_ => {
+              this.$router.push("/");
+            }, 2000);
           });
         });
     }
