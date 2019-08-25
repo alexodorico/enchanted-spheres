@@ -42,13 +42,18 @@ const actions = {
   // If it's not your turn, and three actions haven't been played
   // yet, pass it back
   async passPriority({ commit, dispatch, state }, payload) {
-    await dispatch("resolveStack");
 
-    if (!state[payload.user].turn) {
+    if (state[payload.user].turn) {
+      if (state.turnPhase > 2) {
+        commit("togglePriority")
+      }
+    } else {
       if (state.turnPhase !== 3) {
         commit("togglePriority");
       }
     }
+
+    await dispatch("resolveStack");
   },
 
   // When the stack resolves, that means
