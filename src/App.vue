@@ -30,8 +30,12 @@ export default {
           this.$store.commit("setPlayerColor", { color: response.color });
           this.$router.push(`/game/${response.id}`);
 
+          if (response.color === "white") {
+            this.$store.commit("startGame");
+          }
+
           socket.on("connection", _ => {
-            console.log("player joined");
+            this.$store.commit("startGame");
           });
 
           socket.on("action", message => {
@@ -40,6 +44,7 @@ export default {
           });
 
           socket.on("playerLeft", message => {
+            this.$store.commit("endGame", { winner: [response.color] });
             socket.disconnect();
             this.$router.push("/");
           });
