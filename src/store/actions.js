@@ -1,4 +1,4 @@
-import { swap } from "./store";
+import { swap, checkForAttack } from "./store";
 
 const actions = {
 
@@ -62,6 +62,13 @@ const actions = {
         // be the users priority because they're
         // just moving to the next turn phase
         await commit("incrementTurnPhase");
+
+        if (state.turnPhase >= 3) {
+          // Users turn is done
+          await commit("resetTurnPhase");
+          await dispatch("checkForConfusion");
+          await commit("toggleTurn");
+        }
       } else {
         // if stack phase is one, it's in a response to a spell
         // and stack resolves
@@ -117,8 +124,8 @@ const actions = {
   },
 
   // Combine move and attack?
-  moveOrAttack({ commit, state }, payload) {
-    const attack = checkForAttack(state, payload);
+  async moveOrAttack({ commit, state }, payload) {
+    const attack = await checkForAttack(state, payload);
 
     if (attack) {
       const user = swap(payload.user);
