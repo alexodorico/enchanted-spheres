@@ -1,7 +1,6 @@
 const state = {
-  gameStarted: true,
+  gameStarted: false,
   gameEnded: false,
-  playersJoined: 0,
   stack: new Array(),
   stackPhase: 0,
   turnPhase: 0,
