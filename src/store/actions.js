@@ -65,6 +65,7 @@ const actions = {
 
     await commit("clearStack");
     await commit("resetStackPhase");
+    await commit("resetSelectMove");
     await commit("incrementTurnPhase");
 
     if (state.turnPhase >= 3) {

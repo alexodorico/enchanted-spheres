@@ -8,6 +8,14 @@ const mutations = {
     state.gameStarted = true;
   },
 
+  selectMove(state) {
+    state.moveSelected = true;
+  },
+
+  resetSelectMove(state) {
+    state.moveSelected = false;
+  },
+
   addActionToStack(state, payload) {
     state.stack.unshift(payload);
   },

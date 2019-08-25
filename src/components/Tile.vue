@@ -15,17 +15,17 @@ export default {
     user: String,
     socket: Object
   },
-  data() {
-    return {
-      // MOVE THIS TO STORE
-      // users can't attack from the same space twice
-      moveSelected: false
-    };
-  },
+  // data() {
+  //   return {
+  //     // MOVE THIS TO STORE
+  //     // users can't attack from the same space twice
+  //     moveSelected: false
+  //   };
+  // },
   methods: {
     handleClick() {
       if (
-        !this.moveSelected &&
+        !this.$store.state.moveSelected &&
         this.$store.state[this.$store.state.player].priority
       ) {
         const isValidMove = this.checkForValidMove();
@@ -58,14 +58,13 @@ export default {
         name: "moveOrAttack"
       };
 
+      this.$store.commit("selectMove");
       this.$store.dispatch("moveOrAttackIntent", { ...payload });
 
       this.socket.emit("action", {
         action: "moveOrAttackIntent",
         payload
       });
-
-      this.moveSelected = true;
     }
   },
   computed: {
