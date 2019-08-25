@@ -30,15 +30,18 @@ export default {
           this.$store.commit("setPlayerColor", { color: response.color });
           this.$router.push(`/game/${response.id}`);
 
+          socket.on("connection", _ => {
+            console.log("player joined");
+          });
+
           socket.on("action", message => {
             this.history = message;
             this.$store.dispatch(message.action, message.payload);
           });
 
           socket.on("playerLeft", message => {
-            setTimeout(_ => {
-              this.$router.push("/");
-            }, 2000);
+            socket.disconnect();
+            this.$router.push("/");
           });
         });
     }
